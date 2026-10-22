@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="API_Carniceria/API_Carniceria.csproj" />
+  <Project Path="MVC_Carniceria/MVC_Carniceria.csproj" />
+</Solution>
