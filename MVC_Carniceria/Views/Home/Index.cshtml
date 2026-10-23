@@ -1,8 +1,46 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/Home/index.css" asp-append-version="true" />
+}
+
+<section class="hero text-center">
+    <h1 class="hero-title">Carnicería Guanacaste</h1>
+    <p class="hero-subtitle">Sistema de gestión interna</p>
+</section>
+
+<section class="row g-4 mt-2">
+    <div class="col-md-6 col-lg-3">
+        <a asp-controller="Cliente" asp-action="ListarClientes" class="module-card">
+            <i class="bi bi-people"></i>
+            <h3>Clientes</h3>
+            <p>Registrar, editar y consultar clientes.</p>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <a asp-controller="Empleado" asp-action="ListarEmpleados" class="module-card">
+            <i class="bi bi-person-badge"></i>
+            <h3>Empleados</h3>
+            <p>Administrar el personal de la carnicería.</p>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <a asp-controller="Producto" asp-action="ListarProductos" class="module-card">
+            <i class="bi bi-basket"></i>
+            <h3>Productos</h3>
+            <p>Catálogo de cortes y productos disponibles.</p>
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <a asp-controller="Proveedor" asp-action="ListarProveedores" class="module-card">
+            <i class="bi bi-truck"></i>
+            <h3>Proveedores</h3>
+            <p>Gestión de proveedores y contactos.</p>
+        </a>
+    </div>
+</section>

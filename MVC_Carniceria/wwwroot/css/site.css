@@ -1,31 +1,320 @@
-html {
-  font-size: 14px;
+/* ============================================================
+   Carnicería Guanacaste - site.css
+   ============================================================ */
+
+/* Paleta de colores utilizada */
+:root {
+    --cg-bg: #FAF8F5; /* fondo crema */
+    --cg-surface: #FFFFFF; /* blanco de cards y navbar */
+    --cg-primary: #4A6B4A; /* verde oliva principal */
+    --cg-primary-dark: #3A553A; /* verde oscuro, hover */
+    --cg-accent: #C9A227; /* dorado para detalles */
+    --cg-earth: #8B7355; /* marrón tierra */
+    --cg-text: #2B2B2B; /* texto principal */
+    --cg-text-muted: #6B6B6B; /* texto secundario */
+    --cg-border: #E8E2D8; /* borde suave */
+    --cg-danger: #B23A3A; /* rojo para eliminar */
+
+    --cg-radius: 12px;
+    --cg-radius-sm: 8px;
+    --cg-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    --cg-shadow-hover: 0 4px 18px rgba(0, 0, 0, 0.10);
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* ---------- Base ---------- */
+html, body {
+    min-height: 100%;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+main {
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+    flex: 1;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Fondo crema general y tipografía base */
 body {
-  margin-bottom: 60px;
+    background-color: var(--cg-bg);
+    color: var(--cg-text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    /* Flex para empujar el footer al fondo */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Títulos con tipografia Playfair */
+h1, h2, h3, h4, h5 {
+    font-family: 'Playfair Display', serif;
+    color: var(--cg-text);
+    font-weight: 600;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+a {
+    color: var(--cg-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    a:hover {
+        color: var(--cg-primary-dark);
+    }
+
+/* ---------- Navbar ---------- */
+/* Navbar blanca, fija arriba, con borde suave */
+.navbar {
+    background-color: var(--cg-surface) !important;
+    border-bottom: 1px solid var(--cg-border) !important;
+    padding: 0.85rem 0;
+}
+
+/* Nombre con serif */
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: var(--cg-text) !important;
+    letter-spacing: 0.3px;
+}
+
+    .navbar-brand i {
+        color: var(--cg-primary);
+    }
+
+/* Links del menú con hover crema */
+.navbar-nav .nav-link {
+    color: var(--cg-text) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--cg-radius-sm);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+    .navbar-nav .nav-link:hover {
+        background-color: var(--cg-bg);
+        color: var(--cg-primary) !important;
+    }
+
+    .navbar-nav .nav-link.active {
+        color: var(--cg-primary) !important;
+        background-color: var(--cg-bg);
+    }
+
+/* ---------- Footer ---------- */
+/* Footer oscuro para cerrar el layout */
+.footer {
+    background-color: #2B2B2B;
+    color: #D9D3C7;
+    border-top: none !important;
+    margin-top: 4rem;
+    position: static;
+}
+
+    .footer p {
+        margin-bottom: 0.25rem;
+        color: #EFE9DD;
+    }
+
+    .footer small {
+        color: #A8A092;
+    }
+
+    .footer a {
+        color: var(--cg-accent);
+    }
+
+/* ---------- Botones ---------- */
+.btn {
+    border-radius: var(--cg-radius-sm);
+    font-weight: 500;
+    padding: 0.5rem 1.1rem;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+/* Botón principal en verde oliva */
+.btn-primary {
+    background-color: var(--cg-primary);
+    color: #fff;
+}
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background-color: var(--cg-primary-dark);
+        color: #fff;
+        box-shadow: var(--cg-shadow-hover);
+    }
+
+/* Botón secundario en tono tierra claro */
+.btn-secondary {
+    background-color: #E8E2D8;
+    color: var(--cg-text);
+}
+
+    .btn-secondary:hover {
+        background-color: #D9D3C7;
+        color: var(--cg-text);
+    }
+
+/* Botón de eliminar en rojo apagado */
+.btn-danger {
+    background-color: var(--cg-danger);
+    color: #fff;
+}
+
+    .btn-danger:hover {
+        background-color: #8F2D2D;
+        color: #fff;
+    }
+
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+/* ---------- Cards ---------- */
+.card {
+    border: 1px solid var(--cg-border);
+    border-radius: var(--cg-radius);
+    box-shadow: var(--cg-shadow);
+    background-color: var(--cg-surface);
+}
+
+.card-header {
+    background-color: var(--cg-surface);
+    border-bottom: 1px solid var(--cg-border);
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* ---------- Tablas ---------- */
+.table {
+    background-color: var(--cg-surface);
+    margin-bottom: 0;
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--cg-text);
+}
+
+    /* Cabecera verde con texto claro */
+    .table > thead {
+        background-color: var(--cg-primary);
+    }
+
+        .table > thead th {
+            color: #fff !important;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            padding: 1rem 1rem;
+        }
+
+    .table > tbody td {
+        padding: 0.85rem 1rem;
+        vertical-align: middle;
+        border-color: var(--cg-border);
+    }
+
+    /* Hover crema al pasar el mouse */
+    .table > tbody tr {
+        transition: background-color 0.15s ease;
+    }
+
+        .table > tbody tr:hover {
+            background-color: #F5F1E8;
+        }
+
+/* Wrapper con scroll horizontal y sombra */
+.table-responsive {
+    border-radius: var(--cg-radius);
+    box-shadow: var(--cg-shadow);
+    overflow-x: auto;
+}
+
+/* Fila con existencia baja (Producto) */
+.fila-advertencia {
+    background-color: #F5E3E3;
+}
+
+/* ---------- Formularios ---------- */
+.form-control,
+.form-select {
+    border: 1px solid var(--cg-border);
+    border-radius: var(--cg-radius-sm);
+    padding: 0.6rem 0.9rem;
+    background-color: var(--cg-surface);
+    color: var(--cg-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    /* Focus en verde para todos los inputs */
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--cg-primary);
+        box-shadow: 0 0 0 3px rgba(74, 107, 74, 0.15);
+    }
+
+.form-label {
+    font-weight: 500;
+    color: var(--cg-text);
+    margin-bottom: 0.35rem;
+}
+
+/* ---------- Alertas ---------- */
+.alert {
+    border-radius: var(--cg-radius-sm);
+    border: none;
+}
+
+.alert-success {
+    background-color: #E5EFE5;
+    color: #3A553A;
+}
+
+.alert-danger {
+    background-color: #F5E3E3;
+    color: #8F2D2D;
+}
+
+/* ---------- Utilidades ---------- */
+.text-muted {
+    color: var(--cg-text-muted) !important;
+}
+
+.border-bottom {
+    border-color: var(--cg-border) !important;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .table > thead th,
+    .table > tbody td {
+        padding: 0.6rem 0.7rem;
+        font-size: 0.9rem;
+    }
 }

@@ -1,0 +1,70 @@
+﻿/* ============================================================
+   Home - Index
+   ============================================================ */
+
+/* Encabezado de bienvenida */
+.hero {
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid var(--cg-border);
+    margin-bottom: 1rem;
+}
+
+.hero-title {
+    font-size: 2.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+    color: var(--cg-text-muted);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Tarjetas de acceso a los módulos */
+.module-card {
+    display: block;
+    background-color: var(--cg-surface);
+    border: 1px solid var(--cg-border);
+    border-radius: var(--cg-radius);
+    box-shadow: var(--cg-shadow);
+    padding: 1.75rem 1.5rem;
+    height: 100%;
+    color: var(--cg-text);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+    .module-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--cg-shadow-hover);
+        border-color: var(--cg-primary);
+        color: var(--cg-text);
+    }
+
+    .module-card i {
+        font-size: 2rem;
+        color: var(--cg-primary);
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .module-card h3 {
+        font-size: 1.15rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .module-card p {
+        color: var(--cg-text-muted);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+/* Ajustes del hero en móvil */
+@media (max-width: 768px) {
+    .hero {
+        padding: 2rem 1rem 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+}

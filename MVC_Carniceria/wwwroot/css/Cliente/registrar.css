@@ -1,0 +1,57 @@
+﻿/* ============================================================
+   Cliente - Registrar
+   ============================================================ */
+
+/* Contenedor general del formulario */
+.form-page {
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+/* Encabezado */
+.form-header {
+    margin-bottom: 1.5rem;
+}
+
+    .form-header h1 {
+        margin-bottom: 0.25rem;
+    }
+
+    .form-header p {
+        color: var(--cg-text-muted);
+        margin: 0;
+    }
+
+/* Card blanca que envuelve el formulario */
+.form-card {
+    background-color: var(--cg-surface);
+    border: 1px solid var(--cg-border);
+    border-radius: var(--cg-radius);
+    box-shadow: var(--cg-shadow);
+    padding: 1.75rem;
+}
+
+/* Fila de botones al pie del formulario */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--cg-border);
+}
+
+/* Ajuste en móvil */
+@media (max-width: 576px) {
+    .form-card {
+        padding: 1.25rem;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+}
