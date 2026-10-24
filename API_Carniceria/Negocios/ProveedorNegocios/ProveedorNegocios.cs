@@ -3,11 +3,11 @@ using API_Carniceria.Repositories.Proveedor_Repository;
 
 namespace API_Carniceria.Services.Proveedor_Service
 {
-    public class ProveedorService : IProveedorService
+    public class ProveedorNegocios : IProveedorNegocios
     {
         private readonly IProveedorRepository _proveedorRepository;
 
-        public ProveedorService(IProveedorRepository proveedorRepository)
+        public ProveedorNegocios(IProveedorRepository proveedorRepository)
         {
             _proveedorRepository = proveedorRepository;
         }

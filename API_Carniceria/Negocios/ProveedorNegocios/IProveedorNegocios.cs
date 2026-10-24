@@ -2,7 +2,7 @@
 
 namespace API_Carniceria.Services.Proveedor_Service
 {
-    public interface IProveedorService
+    public interface IProveedorNegocios
     {
         Task<IReadOnlyCollection<Proveedor>> ObtenerTodosAsync();
 

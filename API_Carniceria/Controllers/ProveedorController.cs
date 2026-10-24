@@ -10,9 +10,9 @@ namespace API_Carniceria.Controllers
     public class ProveedorController : ControllerBase
     {
 
-        private readonly IProveedorService _proveedorService;
+        private readonly IProveedorNegocios _proveedorService;
 
-        public ProveedorController(IProveedorService proveedorService)
+        public ProveedorController(IProveedorNegocios proveedorService)
         {
             _proveedorService = proveedorService;
         }

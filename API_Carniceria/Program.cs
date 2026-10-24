@@ -16,7 +16,7 @@ builder.Services.AddSingleton<DatosEnMemoria>();
 
 // Registramos el repositorio y el servicio de proveedor en el contenedor de dependencias.
 builder.Services.AddSingleton<IProveedorRepository, ProveedorRepository>();
-builder.Services.AddScoped<IProveedorService, ProveedorService>();
+builder.Services.AddScoped<IProveedorNegocios, ProveedorNegocios>();
 
 var app = builder.Build();
 
