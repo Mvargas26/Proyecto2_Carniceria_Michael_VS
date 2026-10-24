@@ -14,7 +14,7 @@ builder.Services.AddOpenApi();
 // Creamos una sola instancia de DatosEnMemoria para toda la app,así los datos no se pierden entre peticiones.
 builder.Services.AddSingleton<DatosEnMemoria>();
 
-// Registramos el repositorio y el servicio de proveedor en el contenedor de dependencias.
+// Registramos el repositorio y Negocios de proveedor en el contenedor de dependencias.
 builder.Services.AddSingleton<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<IProveedorNegocios, ProveedorNegocios>();
 

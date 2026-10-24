@@ -2,10 +2,13 @@
 
 namespace MVC_Carniceria.Services
 {
-    public class ProveedorApiService : ApiBaseService
+    public class ProveedorApiService 
     {
-        public ProveedorApiService(HttpClient clienteHttp) : base(clienteHttp)
+        private readonly HttpClient _clienteHttp;
+
+        public ProveedorApiService(HttpClient clienteHttp)
         {
+            _clienteHttp = clienteHttp;
         }
 
         // Pide al API la lista de proveedores.

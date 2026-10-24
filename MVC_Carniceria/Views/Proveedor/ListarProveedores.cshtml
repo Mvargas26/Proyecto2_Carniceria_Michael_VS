@@ -3,6 +3,9 @@
 
 @{
     ViewData["Title"] = "Proveedores";
+
+    var tiposSuministro = (Dictionary<int, string>)ViewBag.TiposSuministro;
+    var frecuenciasEntrega = (Dictionary<int, string>)ViewBag.FrecuenciasEntrega;
 }
 
 @section Styles {
@@ -63,8 +66,8 @@ else
                         <td>@proveedor.NombreContacto</td>
                         <td>@proveedor.Telefono</td>
                         <td>@proveedor.CorreoElectronico</td>
-                        <td>@proveedor.TipoSuministro</td>
-                        <td>@proveedor.FrecuenciaEntrega</td>
+                        <td>@tiposSuministro[proveedor.TipoSuministro.Value]</td>
+                        <td>@frecuenciasEntrega[proveedor.FrecuenciaEntrega.Value]</td>
                         <td class="text-end">
                             <a asp-action="EditarProveedor" asp-route-id="@proveedor.Id" class="btn btn-sm btn-icon btn-edit" title="Editar">
                                 <i class="bi bi-pencil"></i>
