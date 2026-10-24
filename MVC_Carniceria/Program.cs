@@ -1,7 +1,14 @@
+using MVC_Carniceria.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<ProveedorApiService>(cliente =>
+{
+    cliente.BaseAddress = new Uri(builder.Configuration["ApiCarniceria:UrlBase"]!);
+});
 
 var app = builder.Build();
 

@@ -1,0 +1,86 @@
+﻿@using MVC_Carniceria.Models
+@model List<ProveedorViewModel>
+
+@{
+    ViewData["Title"] = "Proveedores";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Proveedor/ListarProveedores.css" asp-append-version="true" />
+}
+
+<div class="page-header">
+    <div>
+        <h1>Proveedores</h1>
+        <p>Listado de proveedores registrados en el sistema.</p>
+        <br />
+        <a asp-action="RegistrarProveedor" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Registrar Proveedor
+        </a>
+    </div>
+
+    <a asp-action="BuscarProveedor" class="btn btn-secondary">
+        <i class="bi bi-search"></i> Buscar Proveedor
+    </a>
+</div>
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger">@ViewBag.MensajeError</div>
+}
+else if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-truck"></i>
+        <h3>No hay proveedores registrados</h3>
+        <p>Comienza registrando el primer proveedor.</p>
+    </div>
+}
+else
+{
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Identificación</th>
+                    <th>Razón Social</th>
+                    <th>Contacto</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Tipo de Suministro</th>
+                    <th>Frecuencia de Entrega</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var proveedor in Model)
+                {
+                    <tr>
+                        <td>@proveedor.Id</td>
+                        <td>@proveedor.Identificacion</td>
+                        <td>@proveedor.RazonSocial</td>
+                        <td>@proveedor.NombreContacto</td>
+                        <td>@proveedor.Telefono</td>
+                        <td>@proveedor.CorreoElectronico</td>
+                        <td>@proveedor.TipoSuministro</td>
+                        <td>@proveedor.FrecuenciaEntrega</td>
+                        <td class="text-end">
+                            <a asp-action="EditarProveedor" asp-route-id="@proveedor.Id" class="btn btn-sm btn-icon btn-edit" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form asp-action="EliminarProveedor" asp-route-id="@proveedor.Id" method="post"
+                                  onsubmit="return confirm('¿Está seguro que desea eliminar al proveedor @proveedor.RazonSocial?');"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-icon btn-delete" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
