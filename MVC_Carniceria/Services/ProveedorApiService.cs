@@ -25,6 +25,39 @@ namespace MVC_Carniceria.Services
             }
         } // fin ListarAsync
 
+        // Pide al API un proveedor por su ID.
+        public async Task<ProveedorViewModel?> ObtenerAsync(Guid id)
+        {
+            try
+            {
+                var proveedor = await _clienteHttp.GetFromJsonAsync<ProveedorViewModel>($"api/Proveedor/Obtener/{id}");
+                return proveedor;
+            }
+            catch (HttpRequestException)
+            {
+                throw new Exception("No se pudo conectar con el servicio. Intente más tarde.");
+            }
+        } // fin ObtenerAsync
+
+        // Envía el proveedor al API; si lo rechaza, lanza el motivo.
+        public async Task RegistrarAsync(ProveedorViewModel proveedor)
+        {
+            try
+            {
+                var respuesta = await _clienteHttp.PostAsJsonAsync("api/Proveedor/Registrar", proveedor);
+
+                if (!respuesta.IsSuccessStatusCode)
+                {
+                    string motivo = await respuesta.Content.ReadAsStringAsync();
+                    throw new Exception(motivo);
+                }
+            }
+            catch (HttpRequestException)
+            {
+                throw new Exception("No se pudo conectar con el servicio. Intente más tarde.");
+            }
+        }//fn
+
 
     }// fin class
 }

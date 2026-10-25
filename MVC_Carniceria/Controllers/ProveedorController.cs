@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC_Carniceria.Models;
 using MVC_Carniceria.Services;
 
@@ -18,6 +19,7 @@ namespace MVC_Carniceria.Controllers
             _catalogosApiService = catalogosApiService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> ListarProveedores()
         {
             try
@@ -37,9 +39,69 @@ namespace MVC_Carniceria.Controllers
             }
         }//fn ListarProveedores
 
+        [HttpGet]
+        public async Task<IActionResult> RegistrarProveedor()
+        {
+            try
+            {
+                await CargarListasDesplegables();
+                return View(new ProveedorViewModel());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.MensajeError = ex.Message;
+                return View("ListarProveedores", new List<ProveedorViewModel>());
+            }
+        }//fn
+
+        [HttpPost]
+        public async Task<IActionResult> RegistrarProveedor(ProveedorViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _proveedorApiService.RegistrarAsync(viewModel);
+
+                    TempData["MensajeExito"] = "Operación realizada correctamente.";
+                    return RedirectToAction("ListarProveedores");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+
+            try
+            {
+                await CargarListasDesplegables();
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.MensajeError = ex.Message;
+                return View("ListarProveedores", new List<ProveedorViewModel>());
+            }
+        } // fn
 
 
 
+
+        #region MetodosInternos
+
+        // Llena los selects con los catálogos que entrega el API.
+        private async Task CargarListasDesplegables()
+        {
+            var tiposIdentificacion = await _catalogosApiService.ObtenerTiposIdentificacionProveedorAsync();
+            var tiposSuministro = await _catalogosApiService.ObtenerTiposSuministroAsync();
+            var frecuenciasEntrega = await _catalogosApiService.ObtenerFrecuenciasEntregaAsync();
+
+            ViewBag.ListaTiposIdentificacion = new SelectList(tiposIdentificacion, "Key", "Value");
+            ViewBag.ListaTiposSuministro = new SelectList(tiposSuministro, "Key", "Value");
+            ViewBag.ListaFrecuenciasEntrega = new SelectList(frecuenciasEntrega, "Key", "Value");
+        }
+
+        #endregion
 
 
     }//fin class

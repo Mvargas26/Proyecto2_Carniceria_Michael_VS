@@ -24,6 +24,9 @@
             return await ObtenerCatalogoAsync("api/Catalogos/TiposIdentificacionProveedor");
         }
 
+
+        #region Metodos Internos
+
         // Pide un catálogo al API; si falla, lanza un mensaje claro.
         private async Task<Dictionary<int, string>> ObtenerCatalogoAsync(string ruta)
         {
@@ -36,8 +39,9 @@
             {
                 throw new Exception("No se pudo conectar con el servicio. Intente más tarde.");
             }
-        }
+        }//fn ObtenerCatalogoAsync
 
+        #endregion
 
     }//fn class
 }//fn space
