@@ -23,7 +23,8 @@
         }
 
         <form asp-action="RegistrarProveedor" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            @* Contenedor para mostrar los errores generales  *@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
             <div class="row g-3">
                 <div class="col-md-4">

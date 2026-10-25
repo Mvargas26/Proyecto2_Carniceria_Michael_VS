@@ -54,6 +54,11 @@ namespace API_Carniceria.Services.Proveedor_Service
         // Revisa las reglas del P1; lanza un error con el motivo si alguna falla.
         private async Task ValidarProveedorAsync(Proveedor proveedor)
         {
+            if (string.IsNullOrWhiteSpace(proveedor.Identificacion))
+            {
+                throw new Exception("El número de identificación es obligatorio.");
+            }
+
             bool formatoValido;
 
             switch (proveedor.TipoIdentificacion)
@@ -102,7 +107,7 @@ namespace API_Carniceria.Services.Proveedor_Service
             {
                 throw new Exception("El teléfono debe contener exactamente 8 dígitos numéricos.");
             }
-        }
+        }//fn
            
         #endregion
 

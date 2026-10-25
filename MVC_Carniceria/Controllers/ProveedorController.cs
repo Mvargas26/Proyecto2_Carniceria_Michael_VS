@@ -115,7 +115,60 @@ namespace MVC_Carniceria.Controllers
                 ViewBag.MensajeError = ex.Message;
                 return View(new List<ProveedorViewModel>());
             }
-        }
+        }//fn
+
+        [HttpGet]
+        public async Task<IActionResult> EditarProveedor(Guid id)
+        {
+            try
+            {
+                var proveedor = await _proveedorApiService.ObtenerAsync(id);
+
+                if (proveedor == null)
+                {
+                    ViewBag.MensajeError = "No se encontró el proveedor especificado.";
+                    return View("ListarProveedores", new List<ProveedorViewModel>());
+                }
+
+                await CargarListasDesplegables();
+                return View(proveedor);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.MensajeError = ex.Message;
+                return View("ListarProveedores", new List<ProveedorViewModel>());
+            }
+        } // fn
+
+        [HttpPost]
+        public async Task<IActionResult> EditarProveedor(Guid id, ProveedorViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _proveedorApiService.EditarAsync(viewModel);
+
+                    TempData["MensajeExito"] = "Operación realizada correctamente.";
+                    return RedirectToAction("ListarProveedores");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+
+            try
+            {
+                await CargarListasDesplegables();
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.MensajeError = ex.Message;
+                return View("ListarProveedores", new List<ProveedorViewModel>());
+            }
+        } // fn
 
 
         #region MetodosInternos

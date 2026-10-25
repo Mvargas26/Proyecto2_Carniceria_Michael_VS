@@ -1,0 +1,95 @@
+﻿@model MVC_Carniceria.Models.ProveedorViewModel
+
+@{
+    ViewData["Title"] = "Editar Proveedor";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Proveedor/RegistrarProveedor.css" asp-append-version="true" />
+}
+
+<div class="form-page">
+
+    <div class="form-header">
+        <h1>Editar Proveedor</h1>
+        <p>Modifique la información del proveedor.</p>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="EditarProveedor" asp-route-id="@Model.Id" method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            @* Contenedor para mostrar los errores generales  *@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label asp-for="TipoIdentificacion" class="form-label">Tipo de Identificación</label>
+                    <select asp-for="TipoIdentificacion" class="form-select" asp-items="ViewBag.ListaTiposIdentificacion">
+                    </select>
+                    <span asp-validation-for="TipoIdentificacion" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-8">
+                    <label asp-for="Identificacion" class="form-label">Identificación</label>
+                    <input asp-for="Identificacion" class="form-control" />
+                    <span asp-validation-for="Identificacion" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="RazonSocial" class="form-label">Razón Social o Nombre Comercial</label>
+                    <input asp-for="RazonSocial" class="form-control" />
+                    <span asp-validation-for="RazonSocial" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="NombreContacto" class="form-label">Nombre de la Persona de Contacto</label>
+                    <input asp-for="NombreContacto" class="form-control" />
+                    <span asp-validation-for="NombreContacto" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Telefono" class="form-label">Teléfono</label>
+                    <input asp-for="Telefono" class="form-control" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="CorreoElectronico" class="form-label">Correo Electrónico</label>
+                    <input asp-for="CorreoElectronico" type="email" class="form-control" />
+                    <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="TipoSuministro" class="form-label">Tipo de Suministro</label>
+                    <select asp-for="TipoSuministro" class="form-select" asp-items="ViewBag.ListaTiposSuministro">
+                        <option value="">-- Seleccione un tipo de suministro --</option>
+                    </select>
+                    <span asp-validation-for="TipoSuministro" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="FrecuenciaEntrega" class="form-label">Frecuencia de Entrega</label>
+                    <select asp-for="FrecuenciaEntrega" class="form-select" asp-items="ViewBag.ListaFrecuenciasEntrega">
+                        <option value="">-- Seleccione una frecuencia --</option>
+                    </select>
+                    <span asp-validation-for="FrecuenciaEntrega" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <a asp-action="ListarProveedores" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

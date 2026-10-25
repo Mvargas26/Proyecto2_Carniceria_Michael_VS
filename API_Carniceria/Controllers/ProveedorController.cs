@@ -26,8 +26,8 @@ namespace API_Carniceria.Controllers
         }//fn
 
 
-        [HttpGet("Detalles/{id}")]
-        public async Task<ActionResult<Proveedor>> Detalles(Guid id)
+        [HttpGet("Obtener/{id}")]
+        public async Task<ActionResult<Proveedor>> Obtener(Guid id)
         {
             var proveedor = await _proveedorNegocios.ObtenerPorIdAsync(id);
 
