@@ -58,6 +58,28 @@ namespace MVC_Carniceria.Services
             }
         }//fn
 
+        public async Task<List<ProveedorViewModel>> BuscarAsync(string texto, string criterio)
+        {
+            try
+            {
+                // Se envían ambos parámetros en la URL
+                var respuesta = await _clienteHttp.GetAsync($"api/Proveedor/Buscar?texto={texto}&criterio={criterio}");
+
+                if (!respuesta.IsSuccessStatusCode)
+                {
+                    string motivo = await respuesta.Content.ReadAsStringAsync();
+                    throw new Exception(motivo);
+                }
+
+                var resultado = await respuesta.Content.ReadFromJsonAsync<List<ProveedorViewModel>>();
+                return resultado ?? new List<ProveedorViewModel>();
+            }
+            catch (HttpRequestException)
+            {
+                throw new Exception("No se pudo conectar con el servicio. Intente más tarde.");
+            }
+        }
+
 
     }// fin class
 }

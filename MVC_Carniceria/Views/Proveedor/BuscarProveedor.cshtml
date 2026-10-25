@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MVC_Carniceria.Models.ProveedorViewModel>
+
+@{
+    ViewData["Title"] = "Buscar Proveedor";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Proveedor/RegistrarProveedor.css" asp-append-version="true" />
+}
+
+<div class="form-page">
+
+    <div class="form-header">
+        <h1>Buscar Proveedor</h1>
+        <p>Ingrese la identificación o razón social del proveedor que desea consultar.</p>
+    </div>
+
+    @if (ViewBag.MensajeError != null)
+    {
+        <div class="alert alert-danger">@ViewBag.MensajeError</div>
+    }
+    @if (ViewBag.MensajeInformativo != null)
+    {
+        <div class="alert alert-info">@ViewBag.MensajeInformativo</div>
+    }
+
+    <div class="form-card">
+        <form asp-action="BuscarProveedor" method="post">
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label class="form-label d-block">Buscar por</label>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="criterio" value="Identificacion" class="form-check-input" id="criterioIdentificacion" checked />
+                        <label class="form-check-label" for="criterioIdentificacion">Identificación</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="criterio" value="RazonSocial" class="form-check-input" id="criterioRazonSocial" />
+                        <label class="form-check-label" for="criterioRazonSocial">Razón Social</label>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <label for="texto" class="form-label">Texto a buscar</label>
+                    <input type="text" name="texto" id="texto" class="form-control" required />
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <a asp-action="ListarProveedores" class="btn btn-secondary">Volver</a>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="form-card mt-3">
+            @foreach (var proveedor in Model)
+            {
+                <p><strong>Identificación:</strong> @proveedor.Identificacion</p>
+                <p><strong>Razón Social:</strong> @proveedor.RazonSocial</p>
+                <p><strong>Contacto:</strong> @proveedor.NombreContacto</p>
+                <p><strong>Teléfono:</strong> @proveedor.Telefono</p>
+                <p><strong>Correo:</strong> @proveedor.CorreoElectronico</p>
+                <p><strong>Tipo de Suministro:</strong> @proveedor.TipoSuministro</p>
+                <p><strong>Frecuencia de Entrega:</strong> @proveedor.FrecuenciaEntrega</p>
+
+                @if (Model.Count() > 1)
+                {
+                    <hr />
+                }
+            }
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

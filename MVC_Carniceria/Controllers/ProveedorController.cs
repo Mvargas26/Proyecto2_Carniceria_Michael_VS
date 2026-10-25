@@ -84,7 +84,38 @@ namespace MVC_Carniceria.Controllers
             }
         } // fn
 
+        [HttpGet]
+        public IActionResult BuscarProveedor()
+        {
+            return View(new List<ProveedorViewModel>());
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> BuscarProveedor(string texto, string criterio)
+        {
+            if (string.IsNullOrWhiteSpace(texto) || string.IsNullOrWhiteSpace(criterio))
+            {
+                ViewBag.MensajeInformativo = "Debe ingresar el texto y seleccionar un criterio de búsqueda.";
+                return View(new List<ProveedorViewModel>());
+            }
+
+            try
+            {
+                var resultados = await _proveedorApiService.BuscarAsync(texto, criterio);
+
+                if (resultados == null || !resultados.Any())
+                {
+                    ViewBag.MensajeInformativo = "No se encontraron proveedores que coincidan con la búsqueda.";
+                }
+
+                return View(resultados);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.MensajeError = ex.Message;
+                return View(new List<ProveedorViewModel>());
+            }
+        }
 
 
         #region MetodosInternos
