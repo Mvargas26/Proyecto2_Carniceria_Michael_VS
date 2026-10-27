@@ -170,6 +170,22 @@ namespace MVC_Carniceria.Controllers
             }
         } // fn
 
+        [HttpPost]
+        public async Task<IActionResult> EliminarProveedor(Guid id)
+        {
+            try
+            {
+                await _proveedorApiService.EliminarAsync(id);
+                TempData["MensajeExito"] = "Proveedor eliminado correctamente.";
+            }
+            catch (Exception ex)
+            {
+                // Captura el mensaje del API (por si tiene productos asociados)
+                TempData["MensajeError"] = ex.Message;
+            }
+
+            return RedirectToAction("ListarProveedores");
+        } // fn
 
         #region MetodosInternos
 

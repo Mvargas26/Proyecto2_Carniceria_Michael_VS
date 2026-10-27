@@ -1,4 +1,12 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+//efecto de desaparecer los alert suavemente
+document.addEventListener("DOMContentLoaded", function () {
+    const alerts = document.querySelectorAll('.alert-dismissible');
 
-// Write your JavaScript code.
+    alerts.forEach(function (alert) {
+        setTimeout(function () {
+            const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        }, 5000); // 5000 ms = 5 segundos
+    });
+});

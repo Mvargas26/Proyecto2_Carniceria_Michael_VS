@@ -13,9 +13,9 @@ namespace API_Carniceria.Controllers
         private readonly IProveedorNegocios _proveedorNegocios;
 
         //constru
-        public ProveedorController(IProveedorNegocios proveedorService)
+        public ProveedorController(IProveedorNegocios proveedorNegocios)
         {
-            _proveedorNegocios = proveedorService;
+            _proveedorNegocios = proveedorNegocios;
         }
 
         [HttpGet("Listar")]
@@ -81,7 +81,25 @@ namespace API_Carniceria.Controllers
             }
         }//fn
 
+        [HttpDelete("Eliminar/{id}")]
+        public async Task<ActionResult> Eliminar(Guid id)
+        {
+            try
+            {
+                bool eliminado = await _proveedorNegocios.EliminarAsync(id);
 
+                if (!eliminado)
+                {
+                    return NotFound("No se encontró el proveedor.");
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        } // fn
 
     }//fn class
 }//fn space

@@ -12,7 +12,7 @@ namespace API_Carniceria.Repositories.Proveedor_Repository
 
         Task<bool> ActualizarAsync(Proveedor proveedor);
 
-        //Task<bool> EliminarAsync(Guid id);
+        Task<bool> EliminarAsync(Guid id);
 
 
 

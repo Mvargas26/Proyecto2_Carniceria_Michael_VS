@@ -69,7 +69,6 @@ namespace MVC_Carniceria.Services
             }
         }
 
-        // 1. Obtener el proveedor por ID 
         public async Task<ProveedorViewModel?> ObtenerAsync(Guid id)
         {
             try
@@ -83,7 +82,6 @@ namespace MVC_Carniceria.Services
             }
         }//fn 
 
-        // 2. Enviar el proveedor modificado al API
         public async Task<bool> EditarAsync(ProveedorViewModel proveedor)
         {
             try
@@ -103,7 +101,27 @@ namespace MVC_Carniceria.Services
             {
                 throw new Exception("No se pudo conectar con el servicio. Intente más tarde.");
             }
-        }
+        }//fn
 
+        public async Task<bool> EliminarAsync(Guid id)
+        {
+            try
+            {
+                var respuesta = await _clienteHttp.DeleteAsync($"api/Proveedor/Eliminar/{id}");
+
+                if (respuesta.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                // Lee el mensaje de regla de negocio enviado desde la API
+                var mensajeError = await respuesta.Content.ReadAsStringAsync();
+                throw new Exception(string.IsNullOrWhiteSpace(mensajeError) ? "No se pudo eliminar el proveedor." : mensajeError);
+            }
+            catch (HttpRequestException)
+            {
+                throw new Exception("No se pudo conectar con el servicio. Intente más tarde.");
+            }
+        } // fn
     }// fin class
 }

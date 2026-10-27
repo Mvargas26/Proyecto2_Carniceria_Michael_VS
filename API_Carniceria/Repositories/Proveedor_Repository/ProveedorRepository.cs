@@ -71,6 +71,18 @@ namespace API_Carniceria.Repositories.Proveedor_Repository
             return Task.FromResult(true);
         }//fn
 
+        public Task<bool> EliminarAsync(Guid id)
+        {
+            Proveedor? actual = _proveedores.FirstOrDefault(p => p.Id == id);
+
+            if (actual == null)
+            {
+                return Task.FromResult(false);
+            }
+
+            _proveedores.Remove(actual);
+            return Task.FromResult(true);
+        } // fn
 
 
 

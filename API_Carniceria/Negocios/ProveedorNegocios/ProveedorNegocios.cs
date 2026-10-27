@@ -1,5 +1,6 @@
 ﻿using API_Carniceria.Entidades;
 using API_Carniceria.Enums;
+using API_Carniceria.Repositories.Producto_Repository;
 using API_Carniceria.Repositories.Proveedor_Repository;
 using System.Text.RegularExpressions;
 
@@ -9,11 +10,13 @@ namespace API_Carniceria.Services.Proveedor_Service
     {
         //variables internas
         private readonly IProveedorRepository _proveedorRepository;
+        private readonly IProductoRepository _productoRepository;
 
         //contru
-        public ProveedorNegocios(IProveedorRepository proveedorRepository)
+        public ProveedorNegocios(IProveedorRepository proveedorRepository, IProductoRepository productoRepository)
         {
             _proveedorRepository = proveedorRepository;
+            _productoRepository = productoRepository;
         }//fn
 
         public Task<IReadOnlyCollection<Proveedor>> ObtenerTodosAsync()
@@ -48,6 +51,28 @@ namespace API_Carniceria.Services.Proveedor_Service
             await ValidarProveedorAsync(proveedor);
             return await _proveedorRepository.ActualizarAsync(proveedor);
         }//fn
+
+        public async Task<bool> EliminarAsync(Guid id)
+        {
+            Proveedor? actual = await _proveedorRepository.ObtenerPorIdAsync(id);
+
+            if (actual == null)
+            {
+                return false;
+            }
+
+            // Regla de integridad: No eliminar si tiene productos vinculados
+            var productos = await _productoRepository.ObtenerTodosAsync();
+            bool tieneProductosAsociados = productos.Any(p => p.ProveedorId == id);
+
+            if (tieneProductosAsociados)
+            {
+                throw new Exception("No es posible eliminar el proveedor porque se encuentra asociado como proveedor principal de uno o más productos.");
+            }
+
+            return await _proveedorRepository.EliminarAsync(id);
+        } // fn
+
 
         #region MetodosInternos
 
