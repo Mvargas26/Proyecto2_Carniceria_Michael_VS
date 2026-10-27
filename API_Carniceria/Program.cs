@@ -1,3 +1,5 @@
+using API_Carniceria.Negocios.ProductoNegocios;
+using API_Carniceria.Repositories.Producto_Repository;
 using API_Carniceria.Repositories.Proveedor_Repository;
 using API_Carniceria.Services.Proveedor_Service;
 using Proyecto1_Carniceria_MichaelVS.Datos;
@@ -17,6 +19,8 @@ builder.Services.AddSingleton<DatosEnMemoria>();
 // Registramos el repositorio y Negocios de proveedor en el contenedor de dependencias.
 builder.Services.AddSingleton<IProveedorRepository, ProveedorRepository>();
 builder.Services.AddScoped<IProveedorNegocios, ProveedorNegocios>();
+builder.Services.AddSingleton<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IProductoNegocios, ProductoNegocios>();
 
 var app = builder.Build();
 

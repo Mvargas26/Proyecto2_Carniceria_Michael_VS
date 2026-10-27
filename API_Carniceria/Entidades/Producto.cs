@@ -16,6 +16,9 @@ namespace API_Carniceria.Entidades
         public decimal ExistenciaActual { get; set; }
         public decimal ExistenciaMinima { get; set; }
 
+        //para almacenar el identificador del proveedor (lo piden en P2)
+        public Guid ProveedorId { get; set; }
+
         public Producto()
         {
             Id = Guid.NewGuid();//aqui si necesitamos el contru porque no hereda como Persona
