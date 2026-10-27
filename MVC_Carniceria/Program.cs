@@ -15,6 +15,11 @@ builder.Services.AddHttpClient<CatalogosApiService>(cliente =>
     cliente.BaseAddress = new Uri(builder.Configuration["ApiCarniceria:UrlBase"]!);
 });
 
+builder.Services.AddHttpClient<ProductoApiService>(cliente =>
+{
+    cliente.BaseAddress = new Uri(builder.Configuration["ApiCarniceria:UrlBase"]!);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

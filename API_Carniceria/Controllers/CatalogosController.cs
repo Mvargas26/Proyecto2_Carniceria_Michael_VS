@@ -69,7 +69,25 @@ namespace API_Carniceria.Controllers
             return Ok(tiposIdentificacion);
         }// fn ObtenerTiposIdentificacionProveedor
 
+        [HttpGet("CategoriasProducto")]
+        public ActionResult<Dictionary<int, string>> ObtenerCategoriasProducto()
+        {
+            var categorias = Enum.GetValues(typeof(Categoria))
+                .Cast<Categoria>()
+                .ToDictionary(c => (int)c, c => c.ToString());
 
+            return Ok(categorias);
+        }
+
+        [HttpGet("UnidadesMedida")]
+        public ActionResult<Dictionary<int, string>> ObtenerUnidadesMedida()
+        {
+            var unidades = Enum.GetValues(typeof(UnidadMedida))
+                .Cast<UnidadMedida>()
+                .ToDictionary(u => (int)u, u => u.ToString());
+
+            return Ok(unidades);
+        }
 
     }//fin class
 }//fn space

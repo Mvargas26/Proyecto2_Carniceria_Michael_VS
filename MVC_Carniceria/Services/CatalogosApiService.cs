@@ -24,6 +24,15 @@
             return await ObtenerCatalogoAsync("api/Catalogos/TiposIdentificacionProveedor");
         }
 
+        public async Task<Dictionary<int, string>> ObtenerCategoriasProductoAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/CategoriasProducto");
+        }
+
+        public async Task<Dictionary<int, string>> ObtenerUnidadesMedidaAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/UnidadesMedida");
+        }
 
         #region Metodos Internos
 
