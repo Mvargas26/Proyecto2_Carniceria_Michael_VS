@@ -1,0 +1,96 @@
+﻿@using MVC_Carniceria.Models
+@model List<ProductoViewModel>
+
+@{
+    ViewData["Title"] = "Buscar Producto";
+
+    var categorias = ViewBag.Categorias as Dictionary<int, string>;
+    var unidadesMedida = ViewBag.UnidadesMedida as Dictionary<int, string>;
+
+    string criterioActual = ViewBag.Criterio as string ?? "Codigo";
+    string textoActual = ViewBag.Texto as string ?? "";
+    bool seRealizoBusqueda = !string.IsNullOrWhiteSpace(textoActual);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Producto/registrarProducto.css" asp-append-version="true" />
+}
+
+<div class="form-page">
+
+    <div class="form-header">
+        <h1>Buscar Producto</h1>
+        <p>Ingrese el código o nombre del producto que desea consultar.</p>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="BuscarProducto" method="get">
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label class="form-label d-block fw-semibold">Buscar por</label>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="criterio" value="Codigo" class="form-check-input" id="criterioCodigo"
+                               @(criterioActual == "Codigo" ? "checked" : "") />
+                        <label class="form-check-label" for="criterioCodigo">Código</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" name="criterio" value="Nombre" class="form-check-input" id="criterioNombre"
+                               @(criterioActual == "Nombre" ? "checked" : "") />
+                        <label class="form-check-label" for="criterioNombre">Nombre</label>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <label for="texto" class="form-label fw-semibold">Texto a buscar</label>
+                    <input type="text" name="texto" id="texto" class="form-control" value="@textoActual" required />
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <a asp-action="ListarProductos" class="btn btn-secondary">Volver</a>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    @if (seRealizoBusqueda)
+    {
+        @if (!Model.Any())
+        {
+            <div class="form-card mt-3">
+                <p class="mb-0 text-muted">No se encontró ningún producto con ese criterio.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var producto in Model)
+            {
+                <div class="form-card mt-3">
+                    <p><strong>Código:</strong> @producto.CodigoProducto</p>
+                    <p><strong>Nombre:</strong> @producto.NombreProducto</p>
+                    <p><strong>Categoría:</strong> @(producto.Categoria.HasValue && categorias != null && categorias.ContainsKey(producto.Categoria.Value) ? categorias[producto.Categoria.Value] : "-")</p>
+                    <p><strong>Unidad de Medida:</strong> @(producto.UnidadMedida.HasValue && unidadesMedida != null && unidadesMedida.ContainsKey(producto.UnidadMedida.Value) ? unidadesMedida[producto.UnidadMedida.Value] : "-")</p>
+                    <p><strong>Precio:</strong> @(producto.PrecioPorUnidadMedida.HasValue ? producto.PrecioPorUnidadMedida.Value.ToString("C2") : "-")</p>
+                    <p><strong>Existencia Actual:</strong> @producto.ExistenciaActual</p>
+                    <p><strong>Existencia Mínima:</strong> @producto.ExistenciaMinima</p>
+                    <p><strong>Proveedor Principal:</strong> @(producto.RazonSocialProveedor ?? "No asignado")</p>
+
+                    @if (producto.RequiereReabastecimiento)
+                    {
+                        <div class="fila-advertencia p-2 rounded mt-2">
+                            <i class="bi bi-exclamation-triangle-fill text-danger me-1"></i>
+                            La existencia actual está igual o debajo del mínimo establecido.
+                        </div>
+                    }
+                </div>
+            }
+        }
+    }
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

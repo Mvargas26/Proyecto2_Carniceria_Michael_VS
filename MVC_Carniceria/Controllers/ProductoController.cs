@@ -54,7 +54,7 @@ namespace MVC_Carniceria.Controllers
         [HttpGet]
         public async Task<IActionResult> RegistrarProducto()
         {
-            await CargarCatalogosYProveedoresAsync();
+            await CargarCatalogosYProveedoresParaSelectAsync();
             return View(new ProductoViewModel());
         } // fn
 
@@ -64,7 +64,7 @@ namespace MVC_Carniceria.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await CargarCatalogosYProveedoresAsync();
+                await CargarCatalogosYProveedoresParaSelectAsync();
                 return View(modelo);
             }
 
@@ -77,7 +77,7 @@ namespace MVC_Carniceria.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                await CargarCatalogosYProveedoresAsync();
+                await CargarCatalogosYProveedoresParaSelectAsync();
                 return View(modelo);
             }
         } // fn
@@ -95,7 +95,7 @@ namespace MVC_Carniceria.Controllers
                     return RedirectToAction(nameof(ListarProductos));
                 }
 
-                await CargarCatalogosYProveedoresAsync();
+                await CargarCatalogosYProveedoresParaSelectAsync();
                 return View(producto);
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace MVC_Carniceria.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await CargarCatalogosYProveedoresAsync();
+                await CargarCatalogosYProveedoresParaSelectAsync();
                 return View(modelo);
             }
 
@@ -124,7 +124,7 @@ namespace MVC_Carniceria.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                await CargarCatalogosYProveedoresAsync();
+                await CargarCatalogosYProveedoresParaSelectAsync();
                 return View(modelo);
             }
         } // fn
@@ -149,6 +149,13 @@ namespace MVC_Carniceria.Controllers
         [HttpGet]
         public async Task<IActionResult> BuscarProducto(string? texto, string? criterio)
         {
+            // Cargamos los catálogos para que la tabla pueda traducir los IDs a texto
+            await CargarCatalogosParaListasAsync();
+
+            // Guardamos los valores para que el formulario los conserve escritos
+            ViewBag.Texto = texto;
+            ViewBag.Criterio = criterio;
+
             if (string.IsNullOrWhiteSpace(texto) || string.IsNullOrWhiteSpace(criterio))
             {
                 return View(new List<ProductoViewModel>());
@@ -166,6 +173,10 @@ namespace MVC_Carniceria.Controllers
                     {
                         prod.RazonSocialProveedor = razonSocial;
                     }
+                    else
+                    {
+                        prod.RazonSocialProveedor = "No asignado";
+                    }
                 }
 
                 return View(productos);
@@ -179,7 +190,7 @@ namespace MVC_Carniceria.Controllers
 
         #region MetodosInternos
 
-        private async Task CargarCatalogosYProveedoresAsync()
+        private async Task CargarCatalogosYProveedoresParaSelectAsync()
         {
             try
             {
@@ -202,6 +213,19 @@ namespace MVC_Carniceria.Controllers
             }
         } // fn
 
+        private async Task CargarCatalogosParaListasAsync()
+        {
+            try
+            {
+                ViewBag.Categorias = await _catalogosApiService.ObtenerCategoriasProductoAsync();
+                ViewBag.UnidadesMedida = await _catalogosApiService.ObtenerUnidadesMedidaAsync();
+            }
+            catch
+            {
+                ViewBag.Categorias = new Dictionary<int, string>();
+                ViewBag.UnidadesMedida = new Dictionary<int, string>();
+            }
+        } // fn
         #endregion
 
     } // fn class
