@@ -69,11 +69,7 @@ else
                             }
                         </td>
                         <td>@producto.ExistenciaMinima</td>
-                        <td>
-                            <span class="badge bg-light text-dark border">
-                                @(producto.RazonSocialProveedor ?? "No asignado")
-                            </span>
-                        </td>
+                        <td>@(producto.RazonSocialProveedor ?? "No asignado")</td>
                         <td class="text-end">
                             <a asp-action="EditarProducto" asp-route-id="@producto.Id" class="btn btn-sm btn-icon btn-edit" title="Editar">
                                 <i class="bi bi-pencil"></i>

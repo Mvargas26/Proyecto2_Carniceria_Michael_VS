@@ -54,7 +54,7 @@ namespace MVC_Carniceria.Controllers
         [HttpGet]
         public async Task<IActionResult> RegistrarProducto()
         {
-            await CargarProveedoresEnViewBagAsync();
+            await CargarCatalogosYProveedoresAsync();
             return View(new ProductoViewModel());
         } // fn
 
@@ -64,7 +64,7 @@ namespace MVC_Carniceria.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await CargarProveedoresEnViewBagAsync();
+                await CargarCatalogosYProveedoresAsync();
                 return View(modelo);
             }
 
@@ -77,7 +77,7 @@ namespace MVC_Carniceria.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                await CargarProveedoresEnViewBagAsync();
+                await CargarCatalogosYProveedoresAsync();
                 return View(modelo);
             }
         } // fn
@@ -95,7 +95,7 @@ namespace MVC_Carniceria.Controllers
                     return RedirectToAction(nameof(ListarProductos));
                 }
 
-                await CargarProveedoresEnViewBagAsync();
+                await CargarCatalogosYProveedoresAsync();
                 return View(producto);
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace MVC_Carniceria.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await CargarProveedoresEnViewBagAsync();
+                await CargarCatalogosYProveedoresAsync();
                 return View(modelo);
             }
 
@@ -124,7 +124,7 @@ namespace MVC_Carniceria.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                await CargarProveedoresEnViewBagAsync();
+                await CargarCatalogosYProveedoresAsync();
                 return View(modelo);
             }
         } // fn
@@ -179,16 +179,26 @@ namespace MVC_Carniceria.Controllers
 
         #region MetodosInternos
 
-        private async Task CargarProveedoresEnViewBagAsync()
+        private async Task CargarCatalogosYProveedoresAsync()
         {
             try
             {
+                // 1. Proveedores
                 var proveedores = await _proveedorApiService.ListarAsync();
                 ViewBag.Proveedores = new SelectList(proveedores, "Id", "RazonSocial");
+
+                // 2. Catálogos desde el API
+                var categorias = await _catalogosApiService.ObtenerCategoriasProductoAsync();
+                ViewBag.Categorias = new SelectList(categorias, "Key", "Value");
+
+                var unidadesMedida = await _catalogosApiService.ObtenerUnidadesMedidaAsync();
+                ViewBag.UnidadesMedida = new SelectList(unidadesMedida, "Key", "Value");
             }
             catch
             {
                 ViewBag.Proveedores = new SelectList(Enumerable.Empty<SelectListItem>());
+                ViewBag.Categorias = new SelectList(Enumerable.Empty<SelectListItem>());
+                ViewBag.UnidadesMedida = new SelectList(Enumerable.Empty<SelectListItem>());
             }
         } // fn
 
