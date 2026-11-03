@@ -1,0 +1,82 @@
+﻿@using MVC_Carniceria.Models
+@model ClienteViewModel
+
+@{
+    ViewData["Title"] = "Editar Cliente";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cliente/editarCliente.css" asp-append-version="true" />
+}
+
+<div class="form-page">
+
+    <div class="form-header">
+        <h1>Editar Cliente</h1>
+        <p>Modifique la información de la persona cliente en el sistema.</p>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="EditarCliente" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label asp-for="TipoIdentificacion" class="form-label">Tipo de Identificación</label>
+                    <select asp-for="TipoIdentificacion" class="form-select" asp-items="ViewBag.ListaTiposIdentificacion">
+                        <option value=""> Seleccione un tipo </option>
+                    </select>
+                    <span asp-validation-for="TipoIdentificacion" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Identificacion" class="form-label">Identificación</label>
+                    <input asp-for="Identificacion" class="form-control" />
+                    <span asp-validation-for="Identificacion" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Nombre" class="form-label">Nombre</label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="PrimerApellido" class="form-label">Primer Apellido</label>
+                    <input asp-for="PrimerApellido" class="form-control" />
+                    <span asp-validation-for="PrimerApellido" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="SegundoApellido" class="form-label">Segundo Apellido</label>
+                    <input asp-for="SegundoApellido" class="form-control" />
+                    <span asp-validation-for="SegundoApellido" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="FechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                    <input asp-for="FechaNacimiento"
+                           type="date"
+                           class="form-control"
+                           value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")"
+                           max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <a asp-action="ListarClientes" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

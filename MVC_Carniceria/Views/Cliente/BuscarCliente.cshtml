@@ -1,0 +1,57 @@
+﻿@using MVC_Carniceria.Models
+@model List<ClienteViewModel>
+
+@{
+    ViewData["Title"] = "Buscar Cliente";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cliente/registrar.css" asp-append-version="true" />
+}
+
+<div class="form-page">
+
+    <div class="form-header">
+        <h1>Buscar Cliente</h1>
+        <p>Ingrese la identificación de la persona cliente que desea consultar.</p>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="BuscarCliente" method="post">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label for="identificacion" class="form-label">Identificación</label>
+                    <input type="text" id="identificacion" name="identificacion" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-actions mt-3">
+                <a asp-action="ListarClientes" class="btn btn-secondary">Volver</a>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    @* Si el controlador envía un mensaje indicando que no hay resultados *@
+    @if (ViewBag.MensajeInformativo != null)
+    {
+        <div class="form-card mt-3">
+            <p>@ViewBag.MensajeInformativo</p>
+        </div>
+    }
+    @* Si el modelo trae el cliente encontrado *@
+    else if (Model != null && Model.Any())
+    {
+        var clienteEncontrado = Model.First();
+        <div class="form-card mt-3">
+            <p><strong>Identificación:</strong> @clienteEncontrado.Identificacion</p>
+            <p><strong>Nombre:</strong> @clienteEncontrado.Nombre @clienteEncontrado.PrimerApellido @clienteEncontrado.SegundoApellido</p>
+            <p><strong>Fecha de Nacimiento:</strong> @clienteEncontrado.FechaNacimiento.ToString("dd/MM/yyyy")</p>
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
