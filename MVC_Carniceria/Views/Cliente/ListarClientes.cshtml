@@ -1,0 +1,95 @@
+﻿@* ------------------------------------------------------------------------------*@
+@using MVC_Carniceria.Models
+@model List<ClienteViewModel>
+@* ------------------------------------------------------------------------------*@
+
+@{
+    ViewData["Title"] = "Clientes";
+    var tiposIdentificacion = ViewBag.TiposIdentificacion as Dictionary<int, string>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cliente/listar.css" asp-append-version="true" />
+}
+
+<div class="page-header">
+    <div>
+        <h1>Clientes</h1>
+        <p>Listado de clientes registrados en el sistema.</p>
+        <br />
+        <a asp-action="RegistrarCliente" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Registrar Cliente
+        </a>
+    </div>
+
+    <a asp-action="BuscarCliente" class="btn btn-secondary">
+        <i class="bi bi-search"></i> Buscar Cliente
+    </a>
+</div>
+
+@* Mostrar error si falla la conexión con el API al intentar listar *@
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-exclamation-octagon-fill me-2"></i> @ViewBag.MensajeError
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-people"></i>
+        <h3>No hay clientes registrados</h3>
+        <p>Comienza registrando el primer cliente.</p>
+    </div>
+}
+else
+{
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tipo Identificación</th>
+                    <th>Identificación</th>
+                    <th>Nombre</th>
+                    <th>Primer Apellido</th>
+                    <th>Segundo Apellido</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cliente in Model)
+                {
+                    @* AQUÍ VA: busca el texto en el diccionario usando el número entero del enum *@
+                    string nombreTipoId = (cliente.TipoIdentificacion.HasValue && tiposIdentificacion != null && tiposIdentificacion.TryGetValue(cliente.TipoIdentificacion.Value, out var tipo))
+                        ? tipo
+                        : "No especificado";
+
+                    <tr>
+                        <td>@nombreTipoId</td>
+                        <td>@cliente.Identificacion</td>
+                        <td>@cliente.Nombre</td>
+                        <td>@cliente.PrimerApellido</td>
+                        <td>@cliente.SegundoApellido</td>
+                        <td>@cliente.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                        <td class="text-end">
+                            <a asp-action="EditarCliente" asp-route-id="@cliente.Id" class="btn btn-sm btn-icon btn-edit" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form asp-action="EliminarCliente" asp-route-id="@cliente.Id" method="post"
+                                  onsubmit="return confirm('¿Está seguro de que desea eliminar a la persona cliente @cliente.Nombre @cliente.PrimerApellido con identificación @cliente.Identificacion?');"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-icon btn-delete" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

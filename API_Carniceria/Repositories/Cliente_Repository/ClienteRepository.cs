@@ -84,7 +84,7 @@ namespace API_Carniceria.Repositories.Cliente_Repository
         {
             _clientes.Add(new Cliente
             {
-                TipoIdentificacion = TipoIdentificacion.Fisica,
+                TipoIdentificacion = TipoIdentificacion.CedulaNacional,
                 Identificacion = "1-1234-0567",
                 Nombre = "María",
                 PrimerApellido = "González",

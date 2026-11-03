@@ -89,5 +89,30 @@ namespace API_Carniceria.Controllers
             return Ok(unidades);
         }
 
+        [HttpGet("TiposIdentificacionCliente")]
+        public ActionResult<Dictionary<int, string>> ObtenerTiposIdentificacionCliente()
+        {
+            List<TipoIdentificacion> tiposPermitidos = new()
+            {
+                TipoIdentificacion.CedulaNacional,
+                TipoIdentificacion.Dimex,
+                TipoIdentificacion.Pasaporte,
+                TipoIdentificacion.CedulaJuridica
+            };
+
+            Dictionary<int, string> tiposIdentificacion = new();
+
+            foreach (TipoIdentificacion tipo in tiposPermitidos)
+            {
+                int numero = (int)tipo;
+                string nombre = tipo.ObtenerNombreVisible();
+
+                tiposIdentificacion.Add(numero, nombre);
+            }
+
+            return Ok(tiposIdentificacion);
+        } // fn ObtenerTiposIdentificacionCliente
+
+
     }//fin class
 }//fn space

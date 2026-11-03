@@ -34,6 +34,13 @@
             return await ObtenerCatalogoAsync("api/Catalogos/UnidadesMedida");
         }
 
+        public async Task<Dictionary<int, string>> ObtenerTiposIdentificacionClienteAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/TiposIdentificacionCliente");
+        }
+
+
+
         #region Metodos Internos
 
         // Pide un catálogo al API; si falla, lanza un mensaje claro.
