@@ -113,6 +113,90 @@ namespace API_Carniceria.Controllers
             return Ok(tiposIdentificacion);
         } // fn ObtenerTiposIdentificacionCliente
 
+        // --- Catálogos para el módulo de Empleados ---
+
+        [HttpGet("TiposIdentificacionEmpleado")]
+        public ActionResult<Dictionary<int, string>> ObtenerTiposIdentificacionEmpleado()
+        {
+            List<TipoIdentificacion> tiposPermitidos = new()
+            {
+                TipoIdentificacion.CedulaNacional,
+                TipoIdentificacion.Dimex,
+                TipoIdentificacion.Pasaporte
+            };
+
+            Dictionary<int, string> tipos = new();
+            foreach (var tipo in tiposPermitidos)
+            {
+                tipos.Add((int)tipo, tipo.ObtenerNombreVisible());
+            }
+
+            return Ok(tipos);
+        }//fn
+
+        [HttpGet("AreasTrabajo")]
+        public ActionResult<Dictionary<int, string>> ObtenerAreasTrabajo()
+        {
+            var areas = Enum.GetValues<AreaTrabajo>()
+                .ToDictionary(a => (int)a, a => a.ObtenerNombreVisible());
+
+            return Ok(areas);
+        }
+
+        [HttpGet("Puestos")]
+        public ActionResult<Dictionary<int, string>> ObtenerPuestos()
+        {
+            var puestos = Enum.GetValues<Puesto>()
+                .ToDictionary(p => (int)p, p => p.ObtenerNombreVisible());
+
+            return Ok(puestos);
+        }
+
+        [HttpGet("Turnos")]
+        public ActionResult<Dictionary<int, string>> ObtenerTurnos()
+        {
+            var turnos = Enum.GetValues<Turno>()
+                .ToDictionary(t => (int)t, t => t.ObtenerNombreVisible());
+
+            return Ok(turnos);
+        }//fn
+
+        [HttpGet("MapeoAreaPuesto")]
+        public ActionResult<Dictionary<string, List<string>>> ObtenerMapeoAreaPuestoEndpoint()
+        {
+            var mapeo = new Dictionary<string, List<string>>();
+
+            foreach (AreaTrabajo area in Enum.GetValues(typeof(AreaTrabajo)))
+            {
+                var puestosDelArea = Enum.GetValues(typeof(Puesto))
+                    .Cast<Puesto>()
+                    .Where(p => PuestoPerteneceAArea(area, p))
+                    .Select(p => ((int)p).ToString()) 
+                    .ToList();
+
+                mapeo[((int)area).ToString()] = puestosDelArea; 
+            }
+
+            return Ok(mapeo);
+        }
+
+        #region MetodosAuxiliares
+
+        private static bool PuestoPerteneceAArea(AreaTrabajo area, Puesto puesto)
+        {
+            return area switch
+            {
+                AreaTrabajo.Administracion => puesto is Puesto.Administrador or Puesto.AsistenteAdministrativo,
+                AreaTrabajo.VentasYCaja => puesto is Puesto.Cajero or Puesto.Vendedor or Puesto.ServicioAlCliente,
+                AreaTrabajo.CorteYPreparacion => puesto is Puesto.Carnicero or Puesto.Despostador or Puesto.Empacador,
+                AreaTrabajo.BodegaEInventario => puesto is Puesto.Bodeguero or Puesto.AuxiliarDeInventario,
+                AreaTrabajo.Distribucion => puesto is Puesto.Conductor or Puesto.AyudanteDeDistribucion,
+                AreaTrabajo.Limpieza => puesto is Puesto.PersonalDeLimpieza,
+                _ => false
+            };
+        }
+
+        #endregion
 
     }//fin class
 }//fn space
