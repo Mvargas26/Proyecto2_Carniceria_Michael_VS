@@ -1,8 +1,10 @@
 using API_Carniceria.Negocios.ClienteNegocios;
 using API_Carniceria.Negocios.EmpleadoNegocios;
+using API_Carniceria.Negocios.FacturaNegocios;
 using API_Carniceria.Negocios.ProductoNegocios;
 using API_Carniceria.Repositories.Cliente_Repository;
 using API_Carniceria.Repositories.Empleado_Repository;
+using API_Carniceria.Repositories.Factura_Repository;
 using API_Carniceria.Repositories.Producto_Repository;
 using API_Carniceria.Repositories.Proveedor_Repository;
 using API_Carniceria.Services.Proveedor_Service;
@@ -26,6 +28,8 @@ builder.Services.AddSingleton<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteNegocios, ClienteNegocios>();
 builder.Services.AddSingleton<IEmpleadoRepository, EmpleadoRepository>();
 builder.Services.AddScoped<IEmpleadoNegocios, EmpleadoNegocios>();
+builder.Services.AddSingleton<IFacturaRepository, FacturaRepository>();
+builder.Services.AddScoped<IFacturaNegocios, FacturaNegocios>();
 
 var app = builder.Build();
 
