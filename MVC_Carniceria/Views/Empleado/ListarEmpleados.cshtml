@@ -1,0 +1,114 @@
+﻿@using MVC_Carniceria.Models
+@model List<EmpleadoViewModel>
+
+@{
+    ViewData["Title"] = "Empleados";
+    var tiposIdentificacion = ViewBag.TiposIdentificacion as Dictionary<int, string>;
+    var areasTrabajo = ViewBag.AreasTrabajo as Dictionary<int, string>;
+    var puestos = ViewBag.Puestos as Dictionary<int, string>;
+    var turnos = ViewBag.Turnos as Dictionary<int, string>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Empleado/listarEmpleados.css" asp-append-version="true" />
+}
+
+<div class="page-header">
+    <div>
+        <h1>Empleados</h1>
+        <p>Listado de personas empleadas registradas en el sistema.</p>
+        <br />
+        <a asp-action="RegistrarEmpleado" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Registrar Empleado
+        </a>
+    </div>
+
+    <a asp-action="BuscarEmpleado" class="btn btn-secondary">
+        <i class="bi bi-search"></i> Buscar Empleado
+    </a>
+</div>
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-exclamation-octagon-fill me-2"></i> @ViewBag.MensajeError
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-people"></i>
+        <h3>No hay personas empleadas registradas</h3>
+        <p>Comienza registrando la primera persona empleada.</p>
+    </div>
+}
+else
+{
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tipo Identificación</th>
+                    <th>Identificación</th>
+                    <th>Nombre</th>
+                    <th>Primer Apellido</th>
+                    <th>Segundo Apellido</th>
+                    <th>Salario Mensual</th>
+                    <th>Área de Trabajo</th>
+                    <th>Puesto</th>
+                    <th>Turno</th>
+                    <th>Fecha de Ingreso</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var empleado in Model)
+                {
+                    string nombreTipoId = (empleado.TipoIdentificacion.HasValue && tiposIdentificacion != null && tiposIdentificacion.TryGetValue(empleado.TipoIdentificacion.Value, out var tipo))
+                        ? tipo
+                        : "No especificado";
+
+                    string nombreArea = (empleado.AreaTrabajo.HasValue && areasTrabajo != null && areasTrabajo.TryGetValue(empleado.AreaTrabajo.Value, out var area))
+                        ? area
+                        : "No especificado";
+
+                    string nombrePuesto = (empleado.Puesto.HasValue && puestos != null && puestos.TryGetValue(empleado.Puesto.Value, out var puesto))
+                        ? puesto
+                        : "No especificado";
+
+                    string nombreTurno = (empleado.Turno.HasValue && turnos != null && turnos.TryGetValue(empleado.Turno.Value, out var turno))
+                        ? turno
+                        : "No especificado";
+
+                    <tr>
+                        <td>@nombreTipoId</td>
+                        <td>@empleado.Identificacion</td>
+                        <td>@empleado.Nombre</td>
+                        <td>@empleado.PrimerApellido</td>
+                        <td>@empleado.SegundoApellido</td>
+                        <td>₡@empleado.SalarioMensual.ToString("N2")</td>
+                        <td>@nombreArea</td>
+                        <td>@nombrePuesto</td>
+                        <td>@nombreTurno</td>
+                        <td>@empleado.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                        <td class="text-end">
+                            <a asp-action="EditarEmpleado" asp-route-id="@empleado.Id" class="btn btn-sm btn-icon btn-edit" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form asp-action="EliminarEmpleado" asp-route-id="@empleado.Id" method="post"
+                                  onsubmit="return confirm('¿Está seguro de que desea eliminar a la persona empleada @empleado.Nombre @empleado.PrimerApellido con identificación @empleado.Identificacion?');"
+                                  style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-icon btn-delete" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

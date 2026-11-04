@@ -39,7 +39,38 @@
             return await ObtenerCatalogoAsync("api/Catalogos/TiposIdentificacionCliente");
         }
 
+        public async Task<Dictionary<int, string>> ObtenerTiposIdentificacionEmpleadoAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/TiposIdentificacionEmpleado");
+        }
 
+        public async Task<Dictionary<int, string>> ObtenerAreasTrabajoAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/AreasTrabajo");
+        }
+
+        public async Task<Dictionary<int, string>> ObtenerPuestosAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/Puestos");
+        }
+
+        public async Task<Dictionary<int, string>> ObtenerTurnosAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/Turnos");
+        }
+
+        public async Task<Dictionary<string, List<string>>> ObtenerMapeoAreaPuestoAsync()
+        {
+            try
+            {
+                var mapeo = await _clienteHttp.GetFromJsonAsync<Dictionary<string, List<string>>>("api/Catalogos/MapeoAreaPuesto");
+                return mapeo ?? new Dictionary<string, List<string>>();
+            }
+            catch (HttpRequestException)
+            {
+                throw new Exception("No se pudo conectar con el servicio. Intente más tarde.");
+            }
+        }
 
         #region Metodos Internos
 
