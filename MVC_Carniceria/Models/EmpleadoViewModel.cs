@@ -32,7 +32,7 @@ namespace MVC_Carniceria.Models
         [Required(ErrorMessage = "La fecha de nacimiento es obligatoria.")]
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Nacimiento")]
-        public DateTime FechaNacimiento { get; set; }
+        public DateTime FechaNacimiento { get; set; } = DateTime.Today;
 
         [Required(ErrorMessage = "El salario mensual es obligatorio.")]
         [Range(1, 5000000, ErrorMessage = "El salario debe ser mayor a cero y hasta ₡5,000,000.")]
@@ -42,7 +42,7 @@ namespace MVC_Carniceria.Models
         [Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Ingreso")]
-        public DateTime FechaIngreso { get; set; }
+        public DateTime FechaIngreso { get; set; } = DateTime.Today;
 
         [Required(ErrorMessage = "Debe seleccionar un área de trabajo.")]
         [Display(Name = "Área de Trabajo")]
