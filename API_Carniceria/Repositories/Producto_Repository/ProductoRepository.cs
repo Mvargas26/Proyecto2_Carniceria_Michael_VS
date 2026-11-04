@@ -9,8 +9,7 @@ namespace API_Carniceria.Repositories.Producto_Repository
     {
         private readonly List<Producto> _productos = new();
 
-        // Constructor: Recibe IProveedorRepository para vincular el producto por defecto
-        // asi ya nace con un proveedor registrado 
+        // Constru 
         public ProductoRepository(IProveedorRepository proveedorRepository)
         {
             var proveedores = proveedorRepository.ObtenerTodosAsync().Result;

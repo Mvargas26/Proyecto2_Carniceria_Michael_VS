@@ -9,7 +9,6 @@ namespace API_Carniceria.Controllers
     [ApiController]
     public class CatalogosController : ControllerBase
     {
-        // Devolvemos los tipos de suministro como número y nombre visible.
         [HttpGet("TiposSuministro")]
         public ActionResult<Dictionary<int, string>> ObtenerTiposSuministro()
         {
@@ -26,8 +25,6 @@ namespace API_Carniceria.Controllers
             return Ok(tiposSuministro);
         }//fn ObtenerTiposSuministro
 
-        // Devolvemos las frecuencias de entrega como número y nombre visible.
-
         [HttpGet("FrecuenciasEntrega")]
         public ActionResult<Dictionary<int, string>> ObtenerFrecuenciasEntrega()
         {
@@ -43,8 +40,6 @@ namespace API_Carniceria.Controllers
 
             return Ok(frecuencias);
         }// ObtenerFrecuenciasEntrega
-
-        // Devolvemos los tipos de identificación que aplican a Proveedor.
 
         [HttpGet("TiposIdentificacionProveedor")]
         public ActionResult<Dictionary<int, string>> ObtenerTiposIdentificacionProveedor()
@@ -113,8 +108,6 @@ namespace API_Carniceria.Controllers
             return Ok(tiposIdentificacion);
         } // fn ObtenerTiposIdentificacionCliente
 
-        // --- Catálogos para el módulo de Empleados ---
-
         [HttpGet("TiposIdentificacionEmpleado")]
         public ActionResult<Dictionary<int, string>> ObtenerTiposIdentificacionEmpleado()
         {
@@ -171,13 +164,31 @@ namespace API_Carniceria.Controllers
                 var puestosDelArea = Enum.GetValues(typeof(Puesto))
                     .Cast<Puesto>()
                     .Where(p => PuestoPerteneceAArea(area, p))
-                    .Select(p => ((int)p).ToString()) 
+                    .Select(p => ((int)p).ToString())
                     .ToList();
 
-                mapeo[((int)area).ToString()] = puestosDelArea; 
+                mapeo[((int)area).ToString()] = puestosDelArea;
             }
 
             return Ok(mapeo);
+        }
+
+        [HttpGet("MetodosPago")]
+        public ActionResult<Dictionary<int, string>> ObtenerMetodosPago()
+        {
+            var metodos = Enum.GetValues<MetodoPago>()
+                .ToDictionary(m => (int)m, m => m.ObtenerNombreVisible());
+
+            return Ok(metodos);
+        }
+
+        [HttpGet("EstadosFactura")]
+        public ActionResult<Dictionary<int, string>> ObtenerEstadosFactura()
+        {
+            var estados = Enum.GetValues<EstadoFactura>()
+                .ToDictionary(e => (int)e, e => e.ToString());
+
+            return Ok(estados);
         }
 
         #region MetodosAuxiliares

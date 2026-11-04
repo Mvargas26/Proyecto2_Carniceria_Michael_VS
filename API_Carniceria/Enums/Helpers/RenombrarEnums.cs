@@ -181,7 +181,22 @@ namespace API_Carniceria.Enums.Helpers
             }
         }
 
-
+        public static string ObtenerNombreVisible(this MetodoPago metodo)
+        {
+            switch (metodo)
+            {
+                case MetodoPago.Efectivo:
+                    return "Efectivo";
+                case MetodoPago.Tarjeta:
+                    return "Tarjeta";
+                case MetodoPago.SinpeMovil:
+                    return "SINPE Móvil";
+                case MetodoPago.Transferencia:
+                    return "Transferencia";
+                default:
+                    return metodo.ToString();
+            }
+        }
 
     }//fn class
 }//fn space

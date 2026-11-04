@@ -1,6 +1,5 @@
 ﻿using API_Carniceria.Entidades;
 using API_Carniceria.Negocios.FacturaNegocios;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_Carniceria.Controllers
@@ -49,24 +48,19 @@ namespace API_Carniceria.Controllers
             }
         }//fn obtener
 
-        [HttpGet("Buscar/{numeroFactura:int}")]
-        public async Task<IActionResult> BuscarPorNumero(int numeroFactura)
+        [HttpGet("Buscar/{criterio}")]
+        public async Task<IActionResult> Buscar(string criterio)
         {
             try
             {
-                var factura = await _facturaNegocios.ObtenerPorNumeroAsync(numeroFactura);
-                if (factura == null)
-                {
-                    return NotFound("No se encontró ninguna factura con el número ingresado.");
-                }
-
-                return Ok(factura);
+                var resultados = await _facturaNegocios.BuscarAsync(criterio);
+                return Ok(resultados);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
-        }//fn buscar por numero
+        }//fn buscar
 
         [HttpPost("Crear")]
         public async Task<IActionResult> Crear([FromBody] Factura factura)
@@ -85,6 +79,71 @@ namespace API_Carniceria.Controllers
                 return BadRequest(ex.Message);
             }
         }//fn crear
-    
+
+        [HttpPut("Actualizar")]
+        public async Task<IActionResult> Actualizar([FromBody] Factura factura)
+        {
+            try
+            {
+                var facturaActualizada = await _facturaNegocios.ActualizarAsync(factura);
+                return Ok(facturaActualizada);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }//fn actualizar
+
+        [HttpDelete("Eliminar/{id:guid}")]
+        public async Task<IActionResult> Eliminar(Guid id)
+        {
+            try
+            {
+                var eliminado = await _facturaNegocios.EliminarAsync(id);
+                if (!eliminado)
+                {
+                    return NotFound("No se encontró la factura a eliminar.");
+                }
+
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }//fn eliminar
+
+        [HttpPut("Pagar/{id:guid}")]
+        public async Task<IActionResult> Pagar(Guid id)
+        {
+            try
+            {
+                var facturaPagada = await _facturaNegocios.PagarAsync(id);
+                return Ok(facturaPagada);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }//fn pagar
+
+        [HttpPut("Anular/{id:guid}")]
+        public async Task<IActionResult> Anular(Guid id)
+        {
+            try
+            {
+                var facturaAnulada = await _facturaNegocios.AnularAsync(id);
+                return Ok(facturaAnulada);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }//fn anular
+
     }//fn class
 }//fn space
