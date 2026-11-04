@@ -1,6 +1,7 @@
 ﻿using API_Carniceria.Entidades;
 using API_Carniceria.Enums;
 using API_Carniceria.Repositories.Empleado_Repository;
+using API_Carniceria.Repositories.Factura_Repository;
 using System.Text.RegularExpressions;
 
 namespace API_Carniceria.Negocios.EmpleadoNegocios
@@ -8,10 +9,12 @@ namespace API_Carniceria.Negocios.EmpleadoNegocios
     public class EmpleadoNegocios : IEmpleadoNegocios
     {
         private readonly IEmpleadoRepository _empleadoRepository;
+        private readonly IFacturaRepository _facturaRepository;
 
-        public EmpleadoNegocios(IEmpleadoRepository empleadoRepository)
+        public EmpleadoNegocios(IEmpleadoRepository empleadoRepository, IFacturaRepository facturaRepository)
         {
             _empleadoRepository = empleadoRepository;
+            _facturaRepository = facturaRepository;
         } // fn
 
         public async Task<List<Empleado>> ObtenerTodosAsync()
@@ -64,7 +67,12 @@ namespace API_Carniceria.Negocios.EmpleadoNegocios
                 return false;
             }
 
-            
+            var tieneFacturas = await _facturaRepository.EmpleadoTieneFacturasAsync(id);
+            if (tieneFacturas)
+            {
+                throw new Exception("No se puede eliminar la persona empleada porque tiene facturas asociadas.");
+            }
+
             await _empleadoRepository.EliminarAsync(id);
             return true;
         } // fn

@@ -1,4 +1,5 @@
 ﻿using API_Carniceria.Entidades;
+using API_Carniceria.Repositories.Factura_Repository;
 using API_Carniceria.Repositories.Producto_Repository;
 using API_Carniceria.Repositories.Proveedor_Repository;
 
@@ -9,11 +10,14 @@ namespace API_Carniceria.Negocios.ProductoNegocios
         private readonly IProductoRepository _productoRepository;
         private readonly IProveedorRepository _proveedorRepository;
 
+        private readonly IFacturaRepository _facturaRepository;
+
         //constru
-        public ProductoNegocios(IProductoRepository productoRepository,IProveedorRepository proveedorRepository)
+        public ProductoNegocios(IProductoRepository productoRepository,IProveedorRepository proveedorRepository, IFacturaRepository facturaRepository)
         {
             _productoRepository = productoRepository;
             _proveedorRepository = proveedorRepository;
+            _facturaRepository = facturaRepository;
         } // fn
 
         public Task<IReadOnlyCollection<Producto>> ObtenerTodosAsync()
@@ -57,6 +61,11 @@ namespace API_Carniceria.Negocios.ProductoNegocios
             if (actual == null)
             {
                 return false;
+            }
+
+            if (await _facturaRepository.ProductoTieneFacturasAsync(id))
+            {
+                throw new Exception("No se puede eliminar el producto porque está asociado a una factura.");
             }
 
             return await _productoRepository.EliminarAsync(id);
