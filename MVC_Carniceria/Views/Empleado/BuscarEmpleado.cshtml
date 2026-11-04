@@ -1,0 +1,82 @@
+﻿@using MVC_Carniceria.Models
+@model List<EmpleadoViewModel>
+
+@{
+    ViewData["Title"] = "Buscar Empleado";
+    var tiposIdentificacion = ViewBag.TiposIdentificacion as Dictionary<int, string>;
+    var areasTrabajo = ViewBag.AreasTrabajo as Dictionary<int, string>;
+    var puestos = ViewBag.Puestos as Dictionary<int, string>;
+    var turnos = ViewBag.Turnos as Dictionary<int, string>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Empleado/registrarEmpleado.css" asp-append-version="true" />
+}
+
+<div class="form-page">
+
+    <div class="form-header">
+        <h1>Buscar Empleado</h1>
+        <p>Ingrese la identificación de la persona empleada que desea consultar.</p>
+    </div>
+
+    <div class="form-card">
+        <form asp-action="BuscarEmpleado" method="post">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label for="identificacion" class="form-label">Identificación</label>
+                    <input type="text" id="identificacion" name="identificacion" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-actions mt-3">
+                <a asp-action="ListarEmpleados" class="btn btn-secondary">Volver</a>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
+
+    @if (ViewBag.MensajeInformativo != null)
+    {
+        <div class="form-card mt-3">
+            <p>@ViewBag.MensajeInformativo</p>
+        </div>
+    }
+    else if (Model != null && Model.Any())
+    {
+        var empleadoEncontrado = Model.First();
+
+        string nombreTipoId = (empleadoEncontrado.TipoIdentificacion.HasValue && tiposIdentificacion != null && tiposIdentificacion.TryGetValue(empleadoEncontrado.TipoIdentificacion.Value, out var tipo))
+            ? tipo
+            : "No especificado";
+
+        string nombreArea = (empleadoEncontrado.AreaTrabajo.HasValue && areasTrabajo != null && areasTrabajo.TryGetValue(empleadoEncontrado.AreaTrabajo.Value, out var area))
+            ? area
+            : "No especificado";
+
+        string nombrePuesto = (empleadoEncontrado.Puesto.HasValue && puestos != null && puestos.TryGetValue(empleadoEncontrado.Puesto.Value, out var puesto))
+            ? puesto
+            : "No especificado";
+
+        string nombreTurno = (empleadoEncontrado.Turno.HasValue && turnos != null && turnos.TryGetValue(empleadoEncontrado.Turno.Value, out var turno))
+            ? turno
+            : "No especificado";
+
+        <div class="form-card mt-3">
+            <p><strong>Tipo de Identificación:</strong> @nombreTipoId</p>
+            <p><strong>Identificación:</strong> @empleadoEncontrado.Identificacion</p>
+            <p><strong>Nombre:</strong> @empleadoEncontrado.Nombre @empleadoEncontrado.PrimerApellido @empleadoEncontrado.SegundoApellido</p>
+            <p><strong>Fecha de Nacimiento:</strong> @empleadoEncontrado.FechaNacimiento.ToString("dd/MM/yyyy")</p>
+            <p><strong>Fecha de Ingreso:</strong> @empleadoEncontrado.FechaIngreso.ToString("dd/MM/yyyy")</p>
+            <p><strong>Salario Mensual:</strong> ₡@empleadoEncontrado.SalarioMensual.ToString("N2")</p>
+            <p><strong>Área de Trabajo:</strong> @nombreArea</p>
+            <p><strong>Puesto:</strong> @nombrePuesto</p>
+            <p><strong>Turno:</strong> @nombreTurno</p>
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
