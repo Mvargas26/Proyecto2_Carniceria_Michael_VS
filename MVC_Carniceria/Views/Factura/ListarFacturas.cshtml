@@ -1,0 +1,137 @@
+﻿@using MVC_Carniceria.Models
+@model List<FacturaViewModel>
+
+@{
+    ViewData["Title"] = "Facturas";
+    var metodosPago = ViewBag.MetodosPago as Dictionary<int, string>;
+    var estadosFactura = ViewBag.EstadosFactura as Dictionary<int, string>;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Factura/listarFacturas.css" asp-append-version="true" />
+}
+
+<div class="page-header">
+    <div>
+        <h1>Facturas</h1>
+        <p>Listado de facturas registradas en el sistema.</p>
+        <br />
+        <a asp-action="RegistrarFactura" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Registrar Factura
+        </a>
+    </div>
+
+    <a asp-action="BuscarFactura" class="btn btn-secondary">
+        <i class="bi bi-search"></i> Buscar Factura
+    </a>
+</div>
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> @TempData["MensajeExito"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-exclamation-octagon-fill me-2"></i> @TempData["MensajeError"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-exclamation-octagon-fill me-2"></i> @ViewBag.MensajeError
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="bi bi-receipt-cutoff"></i>
+        <h3>No hay facturas registradas</h3>
+        <p>Comienza registrando la primera factura en el sistema.</p>
+    </div>
+}
+else
+{
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>N° Factura</th>
+                    <th>Fecha y Hora</th>
+                    <th>Cliente</th>
+                    <th>Empleado</th>
+                    <th>Método de Pago</th>
+                    <th>Estado</th>
+                    <th>Subtotal</th>
+                    <th>Descuento</th>
+                    <th>IVA (13%)</th>
+                    <th>Total</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var factura in Model)
+                {
+                    string nombreMetodo = (factura.MetodoPago.HasValue && metodosPago != null && metodosPago.TryGetValue(factura.MetodoPago.Value, out var metodo))
+                        ? metodo
+                        : (!string.IsNullOrWhiteSpace(factura.NombreMetodoPago) ? factura.NombreMetodoPago : "No especificado");
+
+                    string nombreEstado = (estadosFactura != null && estadosFactura.TryGetValue(factura.Estado, out var est))
+                        ? est
+                        : (!string.IsNullOrWhiteSpace(factura.NombreEstado) ? factura.NombreEstado : "Pendiente");
+
+                    string claseBadge = factura.Estado switch
+                    {
+                        1 => "bg-warning text-dark",  // Pendiente
+                        2 => "bg-success",            // Pagada
+                        3 => "bg-danger",             // Anulada
+                        _ => "bg-secondary"
+                    };
+
+                    <tr>
+                        <td><strong>@factura.NumeroFactura</strong></td>
+                        <td>@factura.Fecha.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        <td>@factura.NombreCliente</td>
+                        <td>@factura.NombreEmpleado</td>
+                        <td>@nombreMetodo</td>
+                        <td>
+                            <span class="badge @claseBadge">@nombreEstado</span>
+                        </td>
+                        <td>₡@factura.Subtotal.ToString("N2")</td>
+                        <td>₡@factura.MontoDescuento.ToString("N2") (@factura.PorcentajeDescuento.ToString("0.##")%)</td>
+                        <td>₡@factura.Impuesto.ToString("N2")</td>
+                        <td><strong>₡@factura.Total.ToString("N2")</strong></td>
+                        <td class="text-end">
+
+                            @if (factura.Estado != 3)
+                            {
+                                <a asp-action="EditarFactura" asp-route-id="@factura.Id" class="btn btn-sm btn-icon btn-edit" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            }
+
+                            @if (factura.Estado == 1)
+                            {
+                                <form asp-action="EliminarFactura" asp-route-id="@factura.Id" method="post"
+                                      onsubmit="return confirm('¿Está seguro de que desea eliminar físicamente la factura @factura.NumeroFactura del cliente @factura.NombreCliente?');"
+                                      style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-icon btn-delete" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

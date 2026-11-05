@@ -1,6 +1,6 @@
 ﻿namespace MVC_Carniceria.Services
 {
-    public class CatalogosApiService 
+    public class CatalogosApiService
     {
         private readonly HttpClient _clienteHttp;
 
@@ -72,9 +72,17 @@
             }
         }
 
-        #region Metodos Internos
+        public async Task<Dictionary<int, string>> ObtenerMetodosPagoAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/MetodosPago");
+        }
 
-        // Pide un catálogo al API; si falla, lanza un mensaje claro.
+        public async Task<Dictionary<int, string>> ObtenerEstadosFacturaAsync()
+        {
+            return await ObtenerCatalogoAsync("api/Catalogos/EstadosFactura");
+        }
+
+        #region Metodos Internos
         private async Task<Dictionary<int, string>> ObtenerCatalogoAsync(string ruta)
         {
             try
