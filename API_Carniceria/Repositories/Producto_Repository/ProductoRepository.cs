@@ -97,7 +97,7 @@ namespace API_Carniceria.Repositories.Producto_Repository
             _productos.Add(new Producto
             {
                 CodigoProducto = "PROD-001",
-                NombreProducto = "Lomito de Res",
+                NombreProducto = "Bistec de Res",
                 Categoria = Categoria.CarneDeRes,
                 UnidadMedida = UnidadMedida.Kilogramo,
                 PrecioPorUnidadMedida = 9500m,
@@ -109,7 +109,7 @@ namespace API_Carniceria.Repositories.Producto_Repository
             _productos.Add(new Producto
             {
                 CodigoProducto = "PROD-002",
-                NombreProducto = "Bistec Especial",
+                NombreProducto = "Chuleta de Cerdo",
                 Categoria = Categoria.CarneDeRes,
                 UnidadMedida = UnidadMedida.Kilogramo,
                 PrecioPorUnidadMedida = 6200m,

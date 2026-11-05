@@ -1,14 +1,23 @@
 ﻿using API_Carniceria.Entidades;
 using API_Carniceria.Enums;
+using API_Carniceria.Repositories.Cliente_Repository;
+using API_Carniceria.Repositories.Empleado_Repository;
+using API_Carniceria.Repositories.Producto_Repository;
 
 namespace API_Carniceria.Repositories.Factura_Repository
 {
     public class FacturaRepository : IFacturaRepository
     {
         private readonly List<Factura> _facturas = new();
+        private readonly IClienteRepository _clienteRepository;
+        private readonly IEmpleadoRepository _empleadoRepository;
+        private readonly IProductoRepository _productoRepository;
 
-        public FacturaRepository()
+        public FacturaRepository(IClienteRepository clienteRepository, IEmpleadoRepository empleadoRepository, IProductoRepository productoRepository)
         {
+            _clienteRepository = clienteRepository;
+            _empleadoRepository = empleadoRepository;
+            _productoRepository = productoRepository;
             AgregarFacturaEjemplo();
         }
 
@@ -104,6 +113,7 @@ namespace API_Carniceria.Repositories.Factura_Repository
         }
 
         #region Metodos Internos
+
         private void AgregarFacturaEjemplo()
         {
             if (_facturas.Any())
@@ -111,17 +121,37 @@ namespace API_Carniceria.Repositories.Factura_Repository
                 return;
             }
 
+            // Traemos las listas asincronas en memoria
+            var listaClientes = _clienteRepository.ObtenerTodosAsync().GetAwaiter().GetResult();
+            var listaEmpleados = _empleadoRepository.ObtenerTodosAsync().GetAwaiter().GetResult();
+            var listaProductos = _productoRepository.ObtenerTodosAsync().GetAwaiter().GetResult();
+
+            // Extraemos los registros reales con LINQ
+            var cliente = listaClientes.FirstOrDefault();
+            var empleado = listaEmpleados.FirstOrDefault();
+            var productos = listaProductos.Take(2).ToList();
+
+            // Si los repositorios aún no tienen datos, no se puede enlazar
+            if (cliente == null || empleado == null || productos.Count < 2)
+            {
+                return;
+            }
+
+            var prod1 = productos[0];
+            var prod2 = productos[1];
+
             var facturaId = Guid.NewGuid();
+
             var facturaEjemplo = new Factura
             {
                 Id = facturaId,
                 NumeroFactura = "FAC-0001",
                 Fecha = DateTime.Now,
-                ClienteId = Guid.NewGuid(),
-                IdentificacionCliente = "1-1111-1111",
-                NombreCliente = "Carlos Mora Solís",
-                EmpleadoId = Guid.NewGuid(),
-                NombreEmpleado = "Ana Gómez Rojas",
+                ClienteId = cliente.Id,
+                IdentificacionCliente = cliente.Identificacion,
+                NombreCliente = cliente.Nombre + " " + cliente.PrimerApellido,
+                EmpleadoId = empleado.Id,
+                NombreEmpleado = empleado.Nombre + " " + empleado.PrimerApellido,
                 MetodoPago = MetodoPago.Efectivo,
                 Estado = EstadoFactura.Pendiente,
                 PorcentajeDescuento = 0,
@@ -131,29 +161,30 @@ namespace API_Carniceria.Repositories.Factura_Repository
                     {
                         Id = Guid.NewGuid(),
                         FacturaId = facturaId,
-                        ProductoId = Guid.NewGuid(),
-                        CodigoProducto = "PROD-001",
-                        NombreProducto = "Bistec de Res",
-                        UnidadMedida = UnidadMedida.Kilogramo,
+                        ProductoId = prod1.Id,
+                        CodigoProducto = prod1.CodigoProducto,
+                        NombreProducto = prod1.NombreProducto,
+                        UnidadMedida = prod1.UnidadMedida,
                         Cantidad = 2,
-                        PrecioUnitario = 4500
+                        PrecioUnitario = prod1.PrecioPorUnidadMedida
                     },
                     new DetalleFactura
                     {
                         Id = Guid.NewGuid(),
                         FacturaId = facturaId,
-                        ProductoId = Guid.NewGuid(),
-                        CodigoProducto = "PROD-002",
-                        NombreProducto = "Chuleta de Cerdo",
-                        UnidadMedida = UnidadMedida.Kilogramo,
+                        ProductoId = prod2.Id,
+                        CodigoProducto = prod2.CodigoProducto,
+                        NombreProducto = prod2.NombreProducto,
+                        UnidadMedida = prod2.UnidadMedida,
                         Cantidad = 1.5m,
-                        PrecioUnitario = 3800
+                        PrecioUnitario = prod2.PrecioPorUnidadMedida
                     }
                 }
             };
 
             _facturas.Add(facturaEjemplo);
-        }
+        }//fn 
+
         #endregion
     }
 }

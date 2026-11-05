@@ -85,10 +85,10 @@ namespace API_Carniceria.Repositories.Cliente_Repository
             _clientes.Add(new Cliente
             {
                 TipoIdentificacion = TipoIdentificacion.CedulaNacional,
-                Identificacion = "1-1234-0567",
-                Nombre = "María",
-                PrimerApellido = "González",
-                SegundoApellido = "Rojas",
+                Identificacion = "1-1111-1111",
+                Nombre = "Carlos",
+                PrimerApellido = "Mora",
+                SegundoApellido = "Solís",
                 FechaNacimiento = new DateTime(1992, 4, 18)
             });
         }

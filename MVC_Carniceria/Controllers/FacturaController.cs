@@ -130,17 +130,17 @@ namespace MVC_Carniceria.Controllers
         }//fn BuscarFactura
 
         [HttpPost]
-        public async Task<IActionResult> BuscarFactura(string criterio)
+        public async Task<IActionResult> BuscarFactura(string criterio, string texto)
         {
-            if (string.IsNullOrWhiteSpace(criterio))
+            if (string.IsNullOrWhiteSpace(texto))
             {
-                ViewBag.MensajeInformativo = "Debe ingresar el número de factura o la identificación de la persona cliente.";
+                ViewBag.MensajeInformativo = "Debe ingresar el texto a buscar.";
                 return View(new List<FacturaViewModel>());
             }
 
             try
             {
-                var facturas = await _facturaApiService.BuscarAsync(criterio);
+                var facturas = await _facturaApiService.BuscarAsync(texto);
 
                 if (facturas == null || !facturas.Any())
                 {
@@ -252,7 +252,7 @@ namespace MVC_Carniceria.Controllers
                 TempData["MensajeError"] = ex.Message;
             }
 
-            return RedirectToAction("DetallesFactura", new { id });
+            return RedirectToAction("ListarFacturas");
         }//fn PagarFactura
 
         [HttpPost]
