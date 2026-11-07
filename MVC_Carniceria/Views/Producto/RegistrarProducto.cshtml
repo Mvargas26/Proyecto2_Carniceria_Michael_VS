@@ -45,7 +45,7 @@
                 <div class="col-md-4">
                     <label asp-for="UnidadMedida" class="form-label">Unidad de Medida</label>
                     <select asp-for="UnidadMedida" class="form-select" asp-items="ViewBag.UnidadesMedida">
-                        <option value="">-- Seleccione una unidad --</option>
+                        <option value=""> Seleccione una unidad </option>
                     </select>
                     <span asp-validation-for="UnidadMedida" class="text-danger"></span>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="col-md-4">
                     <label asp-for="ProveedorId" class="form-label">Proveedor Principal</label>
                     <select asp-for="ProveedorId" class="form-select" asp-items="ViewBag.Proveedores">
-                        <option value="">-- Seleccione un proveedor --</option>
+                        <option value=""> Seleccione un proveedor </option>
                     </select>
                     <span asp-validation-for="ProveedorId" class="text-danger"></span>
                 </div>

@@ -15,22 +15,15 @@
     </div>
 
     <div class="form-card">
-        @if (ViewBag.MensajeError != null)
-        {
-            <div class="alert alert-danger" role="alert">
-                @ViewBag.MensajeError
-            </div>
-        }
 
         <form asp-action="RegistrarProveedor" method="post">
-            @* Contenedor para mostrar los errores generales  *@
             <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
             <div class="row g-3">
                 <div class="col-md-4">
                     <label asp-for="TipoIdentificacion" class="form-label">Tipo de Identificación</label>
                     <select asp-for="TipoIdentificacion" class="form-select" asp-items="ViewBag.ListaTiposIdentificacion">
-                        <option value="">-- Seleccione --</option>
+                        <option value=""> Seleccione </option>
                     </select>
                     <span asp-validation-for="TipoIdentificacion" class="text-danger"></span>
                 </div>
@@ -68,7 +61,7 @@
                 <div class="col-md-6">
                     <label asp-for="TipoSuministro" class="form-label">Tipo de Suministro</label>
                     <select asp-for="TipoSuministro" class="form-select" asp-items="ViewBag.ListaTiposSuministro">
-                        <option value="">-- Seleccione un tipo de suministro --</option>
+                        <option value=""> Seleccione un tipo de suministro </option>
                     </select>
                     <span asp-validation-for="TipoSuministro" class="text-danger"></span>
                 </div>
@@ -76,7 +69,7 @@
                 <div class="col-md-6">
                     <label asp-for="FrecuenciaEntrega" class="form-label">Frecuencia de Entrega</label>
                     <select asp-for="FrecuenciaEntrega" class="form-select" asp-items="ViewBag.ListaFrecuenciasEntrega">
-                        <option value="">-- Seleccione una frecuencia --</option>
+                        <option value=""> Seleccione una frecuencia </option>
                     </select>
                     <span asp-validation-for="FrecuenciaEntrega" class="text-danger"></span>
                 </div>

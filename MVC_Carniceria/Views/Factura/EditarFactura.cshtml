@@ -1,0 +1,191 @@
+﻿@using MVC_Carniceria.Models
+@using System.Text.Json
+@model FacturaViewModel
+
+@{
+    ViewData["Title"] = "Editar Factura";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Factura/RegistrarFactura.css" asp-append-version="true" />
+}
+
+<div class="form-page">
+    <div class="form-header">
+        <h1>Editar Factura</h1>
+        <p>Modifique la información general o los productos de la factura <strong>@Model.NumeroFactura</strong>.</p>
+    </div>
+
+    <form asp-action="EditarFactura" asp-route-id="@Model.Id" method="post" id="formFactura">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="NumeroFactura" />
+        <input type="hidden" asp-for="Fecha" />
+        <input type="hidden" asp-for="Estado" />
+
+        <!-- Cabecera  -->
+        <div class="form-card mb-4">
+            <h4 class="mb-3 border-bottom pb-2">Información General</h4>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">N° Factura</label>
+                    <input type="text" class="form-control bg-light" value="@Model.NumeroFactura" readonly />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Fecha y Hora de Emisión</label>
+                    <input type="text" class="form-control bg-light" value="@Model.Fecha.ToString("dd/MM/yyyy HH:mm:ss")" readonly />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ClienteId" class="form-label">Cliente</label>
+                    <select asp-for="ClienteId" asp-items="ViewBag.ListaClientes" class="form-select" required>
+                        <option value="">-- Seleccione un cliente --</option>
+                    </select>
+                    <span asp-validation-for="ClienteId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="EmpleadoId" class="form-label">Empleado Responsable</label>
+                    <select asp-for="EmpleadoId" asp-items="ViewBag.ListaEmpleados" class="form-select" required>
+                        <option value="">-- Seleccione un empleado --</option>
+                    </select>
+                    <span asp-validation-for="EmpleadoId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="MetodoPago" class="form-label">Método de Pago</label>
+                    <select asp-for="MetodoPago" asp-items="ViewBag.ListaMetodosPago" class="form-select" required>
+                        <option value="">-- Seleccione un método de pago --</option>
+                    </select>
+                    <span asp-validation-for="MetodoPago" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="PorcentajeDescuento" class="form-label">Descuento (%) [Máx. 25%]</label>
+                    <input asp-for="PorcentajeDescuento" type="number" step="0.01" min="0" max="25" class="form-control" id="inputDescuento" />
+                    <span asp-validation-for="PorcentajeDescuento" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!--Selección de Productos -->
+        <div class="form-card mb-4">
+            <h4 class="mb-3 border-bottom pb-2">Agregar Productos</h4>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label">Producto</label>
+                    <select id="selectProducto" class="form-select">
+                        <option value="">-- Seleccione un producto --</option>
+                        @if (ViewBag.ListaProductos != null)
+                        {
+                            foreach (var item in (SelectList)ViewBag.ListaProductos)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Existencia</label>
+                    <input type="text" id="txtExistencia" class="form-control bg-light" readonly placeholder="0" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Precio Unitario</label>
+                    <input type="text" id="txtPrecio" class="form-control bg-light" readonly placeholder="₡0.00" />
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" id="inputCantidad" class="form-control" step="0.01" min="0.01" placeholder="0.00" />
+                </div>
+
+                <div class="col-md-1">
+                    <button type="button" id="btnAgregarLinea" class="btn btn-success w-100" title="Agregar Producto">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="errorDetalle" class="text-danger mt-2 fw-semibold" style="display:none;"></div>
+        </div>
+
+        <!-- Detalle de la Venta (Líneas precargadas y nuevas) -->
+        <div class="form-card mb-4">
+            <h4 class="mb-3 border-bottom pb-2">Detalle de la Venta</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle" id="tablaDetalles">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Código</th>
+                            <th>Producto</th>
+                            <th>Unidad de Medida</th>
+                            <th class="text-end">Cantidad</th>
+                            <th class="text-end">Precio Unitario</th>
+                            <th class="text-end">Subtotal</th>
+                            <th class="text-center" style="width: 80px;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTablaDetalles">
+                        <!-- lo llena JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Resumen final -->
+            <div class="row justify-content-end mt-4">
+                <div class="col-md-5">
+                    <ul class="list-group list-group-flush border rounded">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Subtotal:</span>
+                            <span id="lblSubtotal" class="fw-bold">₡0.00</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Descuento Aplicado:</span>
+                            <span id="lblDescuento" class="text-danger">- ₡0.00</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Base Gravable:</span>
+                            <span id="lblBaseGravable">₡0.00</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>IVA (13%):</span>
+                            <span id="lblImpuesto">₡0.00</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <span class="fs-5 fw-bold">Total:</span>
+                            <span id="lblTotal" class="fs-5 fw-bold text-success">₡0.00</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="ListarFacturas" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar Cambios</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const productosCatalogo = @Html.Raw(ViewBag.ProductosJson ?? "[]");
+
+        // Precarga de los detalles que ya tenía la factura
+        const detallesIniciales = @Html.Raw(JsonSerializer.Serialize(Model.Detalles?.Select(d => new
+                    {
+                        productoId = d.ProductoId,
+                        codigo = d.CodigoProducto,
+                        nombre = d.NombreProducto,
+                        unidadMedida = d.UnidadMedida,
+                        cantidad = d.Cantidad,
+                        precioUnitario = d.PrecioUnitario,
+                        subtotal = d.Subtotal
+            })) ?? "[]");
+    </script>
+    <script src="~/js/Factura/editarFactura.js" asp-append-version="true"></script>
+}
