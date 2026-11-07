@@ -81,7 +81,7 @@ namespace API_Carniceria.Negocios.EmpleadoNegocios
 
         private async Task ValidarEmpleadoAsync(Empleado empleado)
         {
-            // 1. Validamos campos de texto 
+            // Validamos campos de texto 
             if (string.IsNullOrWhiteSpace(empleado.Nombre) || empleado.Nombre.Trim().Length < 3 || empleado.Nombre.Trim().Length > 50)
             {
                 throw new Exception("El nombre es obligatorio y debe tener entre 3 y 50 caracteres.");
@@ -97,7 +97,6 @@ namespace API_Carniceria.Negocios.EmpleadoNegocios
                 throw new Exception("El segundo apellido es obligatorio y debe tener entre 3 y 75 caracteres.");
             }
 
-            // 2. Validamos formato de identificación según su tipo
             if (string.IsNullOrWhiteSpace(empleado.Identificacion))
             {
                 throw new Exception("El número de identificación es obligatorio.");
@@ -126,14 +125,12 @@ namespace API_Carniceria.Negocios.EmpleadoNegocios
                 throw new Exception("El formato de la identificación no es válido para el tipo seleccionado.");
             }
 
-            // 3. Validar identificación única
             bool yaExiste = await _empleadoRepository.YaExisteEstaIdentificacionAsync(empleado.Identificacion, empleado.Id);
             if (yaExiste)
             {
                 throw new Exception("Ya existe una persona empleada registrada con esta identificación.");
             }
 
-            // 4. Validar fecha de nacimiento
             if (empleado.FechaNacimiento > DateTime.Today)
             {
                 throw new Exception("La fecha de nacimiento no puede ser una fecha futura.");
@@ -144,19 +141,16 @@ namespace API_Carniceria.Negocios.EmpleadoNegocios
                 throw new Exception("La persona empleada debe ser mayor de edad (al menos 18 años).");
             }
 
-            // 5. Validar salario mensual
             if (empleado.SalarioMensual <= 0)
             {
                 throw new Exception("El salario mensual debe ser un valor mayor que cero.");
             }
 
-            // 6. Validar fecha de ingreso
             if (empleado.FechaIngreso > DateTime.Today)
             {
                 throw new Exception("La fecha de ingreso no puede ser una fecha futura.");
             }
 
-            // 7. Validar relación lógica entre Área de Trabajo y Puesto (Requisito de rúbrica)
             ValidarRelacionAreaPuesto(empleado.AreaTrabajo, empleado.Puesto);
         } // fn
 

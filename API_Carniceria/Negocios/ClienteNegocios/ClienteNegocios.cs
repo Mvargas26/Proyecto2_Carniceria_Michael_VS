@@ -81,7 +81,7 @@ namespace API_Carniceria.Negocios.ClienteNegocios
 
         private async Task ValidarClienteAsync(Cliente cliente)
         {
-            // 1. Validar campos de texto y longitudes
+            //  Validar campos de texto y longitudes
             if (string.IsNullOrWhiteSpace(cliente.Nombre) || cliente.Nombre.Trim().Length < 3 || cliente.Nombre.Trim().Length > 50)
             {
                 throw new Exception("El nombre es obligatorio y debe tener entre 3 y 50 caracteres.");
@@ -97,7 +97,7 @@ namespace API_Carniceria.Negocios.ClienteNegocios
                 throw new Exception("El segundo apellido es obligatorio y debe tener entre 3 y 75 caracteres.");
             }
 
-            // 2. Validar formato de identificación según su tipo
+            //  Validar formato de identificación según su tipo
             if (string.IsNullOrWhiteSpace(cliente.Identificacion))
             {
                 throw new Exception("El número de identificación es obligatorio.");
@@ -129,14 +129,14 @@ namespace API_Carniceria.Negocios.ClienteNegocios
                 throw new Exception("El formato de la identificación no es válido para el tipo seleccionado.");
             }
 
-            // 3. Validar identificación única 
+            //  Validar identificación única 
             bool yaExiste = await _clienteRepository.YaExisteEstaIdentificacionAsync(cliente.Identificacion, cliente.Id);
             if (yaExiste)
             {
                 throw new Exception("Ya existe una persona cliente registrada con esta identificación.");
             }
 
-            // 4. Validar fecha de nacimiento
+            //  Validar fecha de nacimiento
             if (cliente.FechaNacimiento > DateTime.Today)
             {
                 throw new Exception("La fecha de nacimiento no puede ser una fecha futura.");

@@ -194,11 +194,11 @@ namespace MVC_Carniceria.Controllers
         {
             try
             {
-                // 1. Proveedores
+                //  Proveedores
                 var proveedores = await _proveedorApiService.ListarAsync();
                 ViewBag.Proveedores = new SelectList(proveedores, "Id", "RazonSocial");
 
-                // 2. Catálogos desde el API
+                // Catálogos desde el API
                 var categorias = await _catalogosApiService.ObtenerCategoriasProductoAsync();
                 ViewBag.Categorias = new SelectList(categorias, "Key", "Value");
 

@@ -281,7 +281,7 @@ namespace API_Carniceria.Negocios.FacturaNegocios
             factura.Estado = EstadoFactura.Pagada;
             await _facturaRepository.ActualizarAsync(factura);
             return factura;
-        }
+        }//fn
 
         public async Task<Factura> AnularAsync(Guid id)
         {
