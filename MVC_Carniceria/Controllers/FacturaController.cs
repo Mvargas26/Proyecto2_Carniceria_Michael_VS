@@ -268,7 +268,7 @@ namespace MVC_Carniceria.Controllers
                 TempData["MensajeError"] = ex.Message;
             }
 
-            return RedirectToAction("DetallesFactura", new { id });
+            return RedirectToAction("ListarFacturas");
         }//fn AnularFactura
 
         #region MetodosInternos
